@@ -13,24 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Dev {
+model Nivel {
+  id            Int             @id @default(autoincrement())
+  nivel         String
+  Desenvolvedor Desenvolvedor[]
+
+  @@map("niveis")
+}
+
+model Desenvolvedor {
   id              Int      @id @default(autoincrement())
-  nivel_id        Int
-  name            String
+  nome            String
   sexo            String   @db.Char(1)
   data_nascimento DateTime
   idade           Int
   hobby           String
-  nivel           Level    @relation(fields: [nivel_id], references: [id])
+  nivel           Nivel    @relation(fields: [nivel_id], references: [id])
+  nivel_id        Int      @map("nivelId")
 
-  @@map("devs")
-}
-
-model Level {
-  id    Int    @id @default(autoincrement())
-  nivel String
-
-  devs Dev[]
-
-  @@map("levels")
+  @@map("desenvolvedores")
 }

@@ -1,10 +1,10 @@
 import { Router } from "express";
-import DevsRoutes from "./DevsRoutes";
-import LevelsRoutes from "./LevelsRoutes";
+import DesenvolvedoresRoutes from "./desenvolvedores.routes";
+import NiveisRoutes from "./niveis.routes";
 
 const router = Router();
 
-router.use("/desenvolvedores", DevsRoutes);
-router.use("/niveis", LevelsRoutes);
+router.use("/niveis", NiveisRoutes);
+router.use("/desenvolvedores", DesenvolvedoresRoutes);
 
 export default router;

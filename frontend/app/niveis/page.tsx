@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { columns } from "@/components/LevelColumns";
 import { LevelService } from "@/services/LevelsService";
+import { LevelForm } from "@/components/LevelForm";
 
 export default function Home() {
   const [data, setData] = useState<INivel[]>();
@@ -48,7 +49,7 @@ export default function Home() {
           <Button variant='outline'>Voltar para Desenvolvedores</Button>
         </a>
 
-        <div className='flex flex-1 justify-end items-center gap-2'></div>
+        <LevelForm />
       </div>
 
       <div className='border rounded-lg p-2'>

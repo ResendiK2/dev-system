@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState } from "react";
 
 import { toast } from "sonner";
@@ -22,6 +24,8 @@ export function DeleteConfirmation({ id, type }: { id: number; type: string }) {
     setLoading(true);
 
     try {
+      console.log(`Excluindo ${type} com id ${id}`);
+
       toast.success(
         `${type.charAt(0).toUpperCase() + type.slice(1)} excluído com sucesso.`
       );

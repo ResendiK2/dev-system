@@ -1,4 +1,6 @@
-import { useRef, useState } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 
 import { z } from "zod";
 import { toast } from "sonner";
@@ -28,6 +30,7 @@ import {
 import { Textarea } from "./ui/textarea";
 import { SelectWithSearch } from "./SelectWithSearch";
 import { DatePicker } from "./DatePicker";
+import { LevelService } from "@/services/LevelsService";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
@@ -39,23 +42,12 @@ const formSchema = z.object({
   }),
   data_nascimento: z
     .date()
-    .refine(
-      (data) => {
-        const now = new Date();
-        const birth = new Date(data);
-
-        if (birth > now) {
-          return false;
-        }
-
-        return true;
-      },
-      { message: "Data de nascimento deve ser menor que a data atual." }
-    )
-    .nullable(),
-  idade: z.number().min(1, {
-    message: "Idade deve ser preenchida.",
-  }),
+    .min(new Date("1900-01-01"), {
+      message: "Data de nascimento deve ser maior que 01/01/1900.",
+    })
+    .max(new Date(), {
+      message: "Data de nascimento deve ser menor que a data atual.",
+    }),
   hobby: z.string().min(3, {
     message: "Hobby deve ter no mínimo 3 caracteres.",
   }),
@@ -66,61 +58,7 @@ const formSchema = z.object({
 
 export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
   const [loading, setLoading] = useState(false);
-  const [niveis, setNiveis] = useState<INivel[]>([
-    {
-      id: 1,
-      nivel: "Iniciante",
-      n_desenvolvedores: 17,
-    },
-    {
-      id: 2,
-      nivel: "Junior",
-      n_desenvolvedores: 25,
-    },
-    {
-      id: 3,
-      nivel: "Intermediário",
-      n_desenvolvedores: 12,
-    },
-    {
-      id: 4,
-      nivel: "Pleno",
-      n_desenvolvedores: 58,
-    },
-    {
-      id: 5,
-      nivel: "Pleno Sênior",
-      n_desenvolvedores: 5,
-    },
-    {
-      id: 6,
-      nivel: "Sênior",
-      n_desenvolvedores: 7,
-    },
-    {
-      id: 7,
-      nivel: "Master",
-      n_desenvolvedores: 0,
-    },
-    {
-      id: 8,
-      nivel: "Especialista",
-      n_desenvolvedores: 3,
-    },
-    {
-      id: 9,
-      nivel: "Guru",
-      n_desenvolvedores: 1,
-    },
-    {
-      id: 10,
-      nivel: "Ninja",
-      n_desenvolvedores: 1,
-    },
-  ]);
-  const [defaultValues, setDefaultValues] = useState<IDesenvolvedor | null>(
-    null
-  );
+  const [niveis, setNiveis] = useState<INivel[]>([]);
 
   const dialogRef = useRef<HTMLButtonElement>(null);
 
@@ -130,8 +68,7 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
       id: null,
       nome: "",
       sexo: "",
-      data_nascimento: null,
-      idade: 0,
+      data_nascimento: new Date(),
       hobby: "",
       nivel_id: 0,
     },
@@ -170,6 +107,10 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
   const handleEdit = (desenvolvedor: IDesenvolvedor) => () => {
     form.reset(desenvolvedor);
   };
+
+  useEffect(() => {
+    LevelService.getLevels().then((res: INivel[]) => setNiveis(res));
+  }, []);
 
   return (
     <Dialog>
@@ -270,8 +211,6 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
               </div>
             </div>
 
-            {/* <div className='md:flex w-full md:space-x-2 max-sm:space-y-5'>
-              <div className='flex-1'> */}
             <FormField
               disabled={loading}
               control={form.control}
@@ -280,35 +219,6 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
                 <FormItem className='flex-1 flex-col'>
                   <FormLabel>Data de Nascimento</FormLabel>
                   <FormControl>
-                    {/* <Popover>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full justify-start text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              <CalendarIcon className='mr-2 h-4 w-4' />
-                              {field.value ? (
-                                format(field.value, "dd/MM/yyyy")
-                              ) : (
-                                <span>Clique para selecionar</span>
-                              )}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className='w-auto p-0'>
-                            <Calendar
-                              mode='single'
-                              selected={field.value}
-                              // onSelect={field.onChange}
-                              onSelect={(date) => {
-                                field.onChange(date);
-                              }}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover> */}
                     <DatePicker
                       onValueChange={field.onChange}
                       value={field.value}
@@ -317,24 +227,6 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
                 </FormItem>
               )}
             />
-            {/* </div> */}
-
-            {/* <div className='flex-1'>
-                <FormField
-                  disabled={loading}
-                  control={form.control}
-                  name='idade'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Idade</FormLabel>
-                      <FormControl>
-                        <Input type='number' placeholder='Idade' {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div> */}
 
             <FormField
               disabled={loading}

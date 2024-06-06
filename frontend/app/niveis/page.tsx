@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { TableComponent } from "@/components/DataTable";
 
@@ -18,66 +18,14 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { columns } from "@/components/LevelColumns";
+import { LevelService } from "@/services/LevelsService";
 
 export default function Home() {
-  // export interface INivel {
-  //   id?: number;
-  //   nivel: string;
-  //   Desenvolvedor?: IDesenvolvedor[];
-  // }
+  const [data, setData] = useState<INivel[]>();
 
-  const [data, setData] = useState<INivel[]>([
-    {
-      id: 1,
-      nivel: "Iniciante",
-      n_desenvolvedores: 17,
-    },
-    {
-      id: 2,
-      nivel: "Junior",
-      n_desenvolvedores: 25,
-    },
-    {
-      id: 3,
-      nivel: "Intermediário",
-      n_desenvolvedores: 12,
-    },
-    {
-      id: 4,
-      nivel: "Pleno",
-      n_desenvolvedores: 58,
-    },
-    {
-      id: 5,
-      nivel: "Pleno Sênior",
-      n_desenvolvedores: 5,
-    },
-    {
-      id: 6,
-      nivel: "Sênior",
-      n_desenvolvedores: 7,
-    },
-    {
-      id: 7,
-      nivel: "Master",
-      n_desenvolvedores: 0,
-    },
-    {
-      id: 8,
-      nivel: "Especialista",
-      n_desenvolvedores: 3,
-    },
-    {
-      id: 9,
-      nivel: "Guru",
-      n_desenvolvedores: 1,
-    },
-    {
-      id: 10,
-      nivel: "Ninja",
-      n_desenvolvedores: 1,
-    },
-  ]);
+  useEffect(() => {
+    LevelService.getLevels().then((res: INivel[]) => setData(res));
+  }, []);
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
@@ -104,7 +52,7 @@ export default function Home() {
       </div>
 
       <div className='border rounded-lg p-2'>
-        <TableComponent columns={columns} data={data} />
+        <TableComponent columns={columns} data={data || []} />
       </div>
 
       <Toaster position='top-right' />

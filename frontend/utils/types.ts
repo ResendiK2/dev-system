@@ -1,19 +1,17 @@
-export interface IClient {
-    id?: string
-    name: string
-    email: string
-    phone: string
-    coordinate_x: number | string
-    coordinate_y: number | string
+export interface IDesenvolvedor {
+  id?: number | null;
+  nivel_id: number;
+  nome: string;
+  sexo: string;
+  data_nascimento: Date;
+  idade: number;
+  hobby: string;
+  nivel?: string;
 }
 
-export interface ICreateService {
-    success: boolean,
-    response?: IClient
-    error?: string
-}
-
-export interface IGetService {
-    success: boolean,
-    response?: IClient[]
+export interface INivel {
+  id?: number;
+  nivel: string;
+  n_desenvolvedores?: number;
+  Desenvolvedor?: IDesenvolvedor[];
 }

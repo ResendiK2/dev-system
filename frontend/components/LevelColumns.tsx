@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { LevelForm } from "./LevelForm";
 
 export const columns: ColumnDef<INivel>[] = [
   {
@@ -82,6 +83,8 @@ export const columns: ColumnDef<INivel>[] = [
               </Tooltip>
             </TooltipProvider>
           )}
+
+          <LevelForm nivel={nivel} />
         </div>
       );
     },

@@ -1,125 +1,102 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { toast } from "sonner";
-import { Search } from "lucide-react";
-
-import { TableComponent } from "../components/table";
-
-import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Toaster } from "../components/ui/sonner";
-import { CreateClientComponent } from "../components/createClient";
+import { DevForm } from "../components/DevForm";
 
-import { IClient } from "../utils/types";
-import { filterService, getService } from "../services/client-service";
+import { IDesenvolvedor } from "../utils/types";
+import { TableComponent } from "@/components/DataTable";
+import { columns } from "@/components/DevColumns";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+} from "@/components/ui/breadcrumb";
 
 export default function Desenvolvedores() {
-  const [allClients, setAllClients] = useState<IClient[]>([]);
-  const [clients, setClients] = useState<IClient[]>([
-    /* 
-    
-    id?: string
-    name: string
-    email: string
-    phone: string
-    coordinate_x: number | string
-    coordinate_y: number | string*/
+  const [data, setData] = useState<IDesenvolvedor[]>([
     {
-      id: "1",
-      name: "Cliente 1",
-      email: "client@eail.com",
-      phone: "123456789",
-      coordinate_x: "123",
-      coordinate_y: "123",
+      id: 1,
+      nivel_id: 1,
+      nome: "Carlos Silva",
+      sexo: "M",
+      data_nascimento: new Date("1985-03-25"),
+      idade: 39,
+      hobby:
+        "Gosto de criar miniaturas de navios em garrafas, um hobby que exige muita paciência e precisão.",
+      nivel: "Júnior",
+    },
+    {
+      id: 2,
+      nivel_id: 2,
+      nome: "Maria Souza",
+      sexo: "F",
+      data_nascimento: new Date("1990-07-12"),
+      idade: 33,
+      hobby:
+        "Amo escrever contos de ficção científica, explorando conceitos futurísticos e possibilidades alternativas.",
+      nivel: "Pleno",
+    },
+    {
+      id: 3,
+      nivel_id: 3,
+      nome: "José Lima",
+      sexo: "M",
+      data_nascimento: new Date("1978-11-05"),
+      idade: 45,
+      hobby:
+        "Sou um entusiasta de maratonas de filmes clássicos, assistindo e discutindo sobre suas técnicas cinematográficas.",
+      nivel: "Sênior",
+    },
+    {
+      id: 4,
+      nivel_id: 1,
+      nome: "Ana Oliveira",
+      sexo: "F",
+      data_nascimento: new Date("1988-01-15"),
+      idade: 36,
+      hobby:
+        "Pratico jardinagem urbana, transformando pequenos espaços em exuberantes jardins sustentáveis.",
+      nivel: "Júnior",
+    },
+    {
+      id: 5,
+      nivel_id: 2,
+      nome: "Bruno Almeida",
+      sexo: "M",
+      data_nascimento: new Date("1992-06-30"),
+      idade: 31,
+      hobby:
+        "Adoro cozinhar pratos gourmet experimentais, combinando sabores e técnicas de diferentes culturas.",
+      nivel: "Pleno",
     },
   ]);
-  const [filter, setFilter] = useState("");
-  const [hasChanges, setHasChanges] = useState(true);
-
-  const getUsers = async () => {
-    try {
-      // const { response, success } = await getService();
-      // if (!success) {
-      //   toast.error("Erro ao buscar cliente");
-      //   return;
-      // }
-      // setClients(response || []);
-      // setAllClients(response || []);
-    } catch (error) {
-      toast.error("Erro ao buscar clientes, recarregue a página");
-    }
-  };
-
-  const filterClients = async (filter: string) => {
-    try {
-      if (filter?.length === 0) {
-        setClients(allClients);
-        return;
-      }
-
-      const { response, success } = await filterService(filter);
-
-      if (!success) {
-        toast.error("Erro ao buscar cliente");
-        return;
-      }
-
-      setClients(response || []);
-    } catch (error) {
-      toast.error("Erro ao buscar clientes");
-    }
-  };
-
-  useEffect(() => {
-    if (filter?.length > 0) return;
-
-    setClients(allClients);
-  }, [filter]);
-
-  // useEffect(() => {
-  //   getUsers();
-  // }, []);
 
   return (
-    <div className='p-6 max-w-4xl mx-auto space-y-4'>
-      <h1 className='text-3xl font-bold'>Desenvolvedores</h1>
+    <div className='p-6 max-w-full mx-auto space-y-4'>
+      <h1 className='text-3xl font-bold'>Dev System</h1>
 
-      <div className='md:flex justify-between items-center max-md:space-y-2 gap-2'>
-        <Input
-          name='filter'
-          placeholder='Filtrar clientes'
-          className='w-2/3'
-          value={filter}
-          onChange={(e) => {
-            setFilter(e.target.value);
-          }}
-        />
-        <Button variant='outline' onClick={() => filterClients(filter)}>
-          <Search className='w-4 h-4' />
-        </Button>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/'>Desenvolvedores</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-        <div className='flex flex-1 justify-end items-center gap-2'>
-          <CreateClientComponent
-            setClients={setClients}
-            setAllClients={setAllClients}
-            setHasChanges={setHasChanges}
-          />
+      <div className='flex flex-1 justify-between items-center gap-2'>
+        <a href='/niveis'>
+          <Button variant='outline'>Ver Niveis</Button>
+        </a>
 
-          <a href='/niveis'>
-            <Button>Niveis</Button>
-          </a>
-        </div>
+        <DevForm />
       </div>
 
       <div className='border rounded-lg p-2'>
-        <TableComponent
-          clients={clients}
-          setClients={setClients}
-          setAllClients={setAllClients}
-          setHasChanges={setHasChanges}
-        />
+        <TableComponent columns={columns} data={data} />
       </div>
 
       <Toaster position='top-right' />

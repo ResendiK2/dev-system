@@ -1,19 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { toast } from "sonner";
-import { Search } from "lucide-react";
+import { TableComponent } from "@/components/DataTable";
 
-import { TableComponent } from "../../components/table";
-
-import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Toaster } from "../../components/ui/sonner";
-import { CreateClientComponent } from "../../components/createClient";
 
-import { IClient } from "../../utils/types";
-import { filterService, getService } from "../../services/client-service";
+import { INivel } from "../../utils/types";
 
 import {
   Breadcrumb,
@@ -23,76 +17,70 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { columns } from "@/components/LevelColumns";
 
 export default function Home() {
-  const [allClients, setAllClients] = useState<IClient[]>([]);
-  const [clients, setClients] = useState<IClient[]>([
-    /* 
-    
-    id?: string
-    name: string
-    email: string
-    phone: string
-    coordinate_x: number | string
-    coordinate_y: number | string*/
+  // export interface INivel {
+  //   id?: number;
+  //   nivel: string;
+  //   Desenvolvedor?: IDesenvolvedor[];
+  // }
+
+  const [data, setData] = useState<INivel[]>([
     {
-      id: "1",
-      name: "Cliente 1",
-      email: "client@eail.com",
-      phone: "123456789",
-      coordinate_x: "123",
-      coordinate_y: "123",
+      id: 1,
+      nivel: "Iniciante",
+      n_desenvolvedores: 17,
+    },
+    {
+      id: 2,
+      nivel: "Junior",
+      n_desenvolvedores: 25,
+    },
+    {
+      id: 3,
+      nivel: "Intermediário",
+      n_desenvolvedores: 12,
+    },
+    {
+      id: 4,
+      nivel: "Pleno",
+      n_desenvolvedores: 58,
+    },
+    {
+      id: 5,
+      nivel: "Pleno Sênior",
+      n_desenvolvedores: 5,
+    },
+    {
+      id: 6,
+      nivel: "Sênior",
+      n_desenvolvedores: 7,
+    },
+    {
+      id: 7,
+      nivel: "Master",
+      n_desenvolvedores: 0,
+    },
+    {
+      id: 8,
+      nivel: "Especialista",
+      n_desenvolvedores: 3,
+    },
+    {
+      id: 9,
+      nivel: "Guru",
+      n_desenvolvedores: 1,
+    },
+    {
+      id: 10,
+      nivel: "Ninja",
+      n_desenvolvedores: 1,
     },
   ]);
-  const [filter, setFilter] = useState("");
-  const [hasChanges, setHasChanges] = useState(true);
-
-  const getUsers = async () => {
-    try {
-      // const { response, success } = await getService();
-      // if (!success) {
-      //   toast.error("Erro ao buscar cliente");
-      //   return;
-      // }
-      // setClients(response || []);
-      // setAllClients(response || []);
-    } catch (error) {
-      toast.error("Erro ao buscar clientes, recarregue a página");
-    }
-  };
-
-  const filterClients = async (filter: string) => {
-    try {
-      if (filter?.length === 0) {
-        setClients(allClients);
-        return;
-      }
-
-      const { response, success } = await filterService(filter);
-
-      if (!success) {
-        toast.error("Erro ao buscar cliente");
-        return;
-      }
-
-      setClients(response || []);
-    } catch (error) {
-      toast.error("Erro ao buscar clientes");
-    }
-  };
-
-  useEffect(() => {
-    if (filter?.length > 0) return;
-
-    setClients(allClients);
-  }, [filter]);
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   return (
-    <div className='p-6 max-w-4xl mx-auto space-y-4'>
+    <div className='p-6 max-w-full mx-auto space-y-4'>
       <h1 className='text-3xl font-bold'>Niveis</h1>
 
       <Breadcrumb>
@@ -109,37 +97,14 @@ export default function Home() {
 
       <div className='md:flex justify-between items-center max-md:space-y-2 gap-2'>
         <a href='/'>
-          <Button>Voltar</Button>
+          <Button variant='outline'>Voltar para Desenvolvedores</Button>
         </a>
-        <Input
-          name='filter'
-          placeholder='Filtrar clientes'
-          className='w-2/3'
-          value={filter}
-          onChange={(e) => {
-            setFilter(e.target.value);
-          }}
-        />
-        <Button variant='outline' onClick={() => filterClients(filter)}>
-          <Search className='w-4 h-4' />
-        </Button>
 
-        <div className='flex flex-1 justify-end items-center gap-2'>
-          <CreateClientComponent
-            setClients={setClients}
-            setAllClients={setAllClients}
-            setHasChanges={setHasChanges}
-          />
-        </div>
+        <div className='flex flex-1 justify-end items-center gap-2'></div>
       </div>
 
       <div className='border rounded-lg p-2'>
-        <TableComponent
-          clients={clients}
-          setClients={setClients}
-          setAllClients={setAllClients}
-          setHasChanges={setHasChanges}
-        />
+        <TableComponent columns={columns} data={data} />
       </div>
 
       <Toaster position='top-right' />

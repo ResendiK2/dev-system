@@ -1,17 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
-import { ArrowUpDown, MoreHorizontal, Trash } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { ArrowUpDown } from "lucide-react";
 import { IDesenvolvedor } from "@/utils/types";
 import { format } from "date-fns";
 import { DeleteConfirmation } from "./DeleteConfirmation";

@@ -28,10 +28,12 @@ export function SelectWithSearch({
   items = [],
   value: initValue,
   onValueChange,
+  disabled,
 }: {
   items: IItems[];
   value: string;
   onValueChange: (value: string) => void;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(initValue);
@@ -44,6 +46,7 @@ export function SelectWithSearch({
           role='combobox'
           aria-expanded={open}
           className='w-full justify-between'
+          disabled={disabled}
         >
           {items?.find((item) => item.value === value)?.label ?? "Selecione..."}
           <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />

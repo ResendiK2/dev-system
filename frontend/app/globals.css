@@ -57,3 +57,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 30px;
+  cursor: pointer;
+}
+
+::-webkit-calendar-picker-indicator:hover {
+  transition: all 0.3s;
+  transform: scale(1.3);
+}

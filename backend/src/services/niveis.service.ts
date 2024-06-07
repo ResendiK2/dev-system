@@ -29,6 +29,12 @@ export const getNiveisService = async (
   return { niveis, total };
 };
 
+export const getNivelByNameService = async (nivel: string) => {
+  return await prismaClient.nivel.findFirst({
+    where: { nivel },
+  });
+};
+
 export const createNivelService = async (nivel: string) => {
   return await prismaClient.nivel.create({
     data: { nivel },

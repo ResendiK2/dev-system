@@ -1,0 +1,498 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "description": "API de Documentação do sistema Dev System",
+    "contact": {
+      "email": "gabriel.arantesresende@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Local server"
+    },
+    {
+      "url": "https://dev-system-backend.herokuapp.com",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/api/niveis": {
+      "get": {
+        "summary": "Listar Níveis",
+        "description": "Retorna a lista de níveis existentes.",
+        "responses": {
+          "200": {
+            "description": "Lista de níveis.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "nivel": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhum nível cadastrado."
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar Nível",
+        "description": "Cadastra um novo nível.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nivel": {
+                    "type": "string"
+                  }
+                },
+                "required": ["nivel"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Nível criado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "nivel": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição incorreta."
+          }
+        }
+      }
+    },
+    "/api/niveis/{id}": {
+      "put": {
+        "summary": "Editar Nível",
+        "description": "Edita um nível existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nivel": {
+                    "type": "string"
+                  }
+                },
+                "required": ["nivel"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nível editado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "nivel": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição incorreta."
+          },
+          "404": {
+            "description": "Nível não encontrado."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remover Nível",
+        "description": "Remove um nível existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Nível removido com sucesso."
+          },
+          "400": {
+            "description": "Existem desenvolvedores associados a este nível."
+          },
+          "404": {
+            "description": "Nível não encontrado."
+          }
+        }
+      }
+    },
+    "/api/desenvolvedores": {
+      "get": {
+        "summary": "Listar Desenvolvedores",
+        "description": "Retorna a lista de desenvolvedores existentes.",
+        "responses": {
+          "200": {
+            "description": "Lista de desenvolvedores.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "nome": {
+                            "type": "string"
+                          },
+                          "sexo": {
+                            "type": "string",
+                            "enum": ["M", "F"]
+                          },
+                          "data_nascimento": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "idade": {
+                            "type": "integer"
+                          },
+                          "hobby": {
+                            "type": "string"
+                          },
+                          "nivel": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "nivel": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhum desenvolvedor cadastrado."
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar Desenvolvedor",
+        "description": "Cadastra um novo desenvolvedor.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nivel_id": {
+                    "type": "integer"
+                  },
+                  "nome": {
+                    "type": "string"
+                  },
+                  "sexo": {
+                    "type": "string",
+                    "enum": ["M", "F"]
+                  },
+                  "data_nascimento": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "hobby": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nivel_id",
+                  "nome",
+                  "sexo",
+                  "data_nascimento",
+                  "hobby"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Desenvolvedor criado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "nome": {
+                      "type": "string"
+                    },
+                    "sexo": {
+                      "type": "string",
+                      "enum": ["M", "F"]
+                    },
+                    "data_nascimento": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "idade": {
+                      "type": "integer"
+                    },
+                    "hobby": {
+                      "type": "string"
+                    },
+                    "nivel": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "nivel": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição incorreta."
+          }
+        }
+      }
+    },
+    "/api/desenvolvedores/{id}": {
+      "put": {
+        "summary": "Editar Desenvolvedor",
+        "description": "Edita um desenvolvedor existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "hobby": {
+                    "type": "string"
+                  },
+                  "nivel_id": {
+                    "type": "integer"
+                  },
+                  "sexo": {
+                    "type": "string",
+                    "enum": ["M", "F"]
+                  },
+                  "data_nascimento": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "nome",
+                  "hobby",
+                  "nivel_id",
+                  "sexo",
+                  "data_nascimento"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Desenvolvedor editado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "nome": {
+                      "type": "string"
+                    },
+                    "sexo": {
+                      "type": "string",
+                      "enum": ["M", "F"]
+                    },
+                    "data_nascimento": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "idade": {
+                      "type": "integer"
+                    },
+                    "hobby": {
+                      "type": "string"
+                    },
+                    "nivel": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "nivel": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição incorreta."
+          },
+          "404": {
+            "description": "Desenvolvedor não encontrado."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remover Desenvolvedor",
+        "description": "Remove um desenvolvedor existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Desenvolvedor removido com sucesso."
+          },
+          "400": {
+            "description": "Problemas na remoção do desenvolvedor."
+          },
+          "404": {
+            "description": "Desenvolvedor não encontrado."
+          }
+        }
+      }
+    }
+  }
+}

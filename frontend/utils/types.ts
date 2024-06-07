@@ -6,7 +6,7 @@ export interface IDesenvolvedor {
   data_nascimento: Date;
   idade: number;
   hobby: string;
-  nivel?: string;
+  nivel?: INivel;
 }
 
 export interface INivel {
@@ -14,6 +14,23 @@ export interface INivel {
   nivel: string;
   n_desenvolvedores?: number;
   Desenvolvedor?: IDesenvolvedor[];
+}
+
+export interface IMeta {
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+}
+
+export interface IGetNiveis {
+  data: INivel[];
+  meta: IMeta;
+}
+
+export interface IGetDesenvolvedores {
+  data: IDesenvolvedor[];
+  meta: IMeta;
 }
 
 export interface ICustomError {

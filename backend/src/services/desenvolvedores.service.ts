@@ -1,3 +1,5 @@
+import moment from "moment";
+
 import prismaClient from "../prisma";
 import { IDesenvolvedor } from "../types/types";
 
@@ -17,6 +19,14 @@ export const getDesenvolvedoresService = async (
     include: { nivel: true },
   });
 
+  const hoje = moment();
+
+  desenvolvedores.forEach((dev: IDesenvolvedor) => {
+    const dataNascimento = moment(dev.data_nascimento);
+
+    dev.idade = hoje.diff(dataNascimento, "years");
+  });
+
   const total = await prismaClient.desenvolvedor.count({ where });
 
   return { desenvolvedores, total };
@@ -27,7 +37,6 @@ export const createDesenvolvedorService = async ({
   nome,
   sexo,
   data_nascimento,
-  idade,
   hobby,
 }: IDesenvolvedor) => {
   return await prismaClient.desenvolvedor.create({
@@ -36,7 +45,6 @@ export const createDesenvolvedorService = async ({
       nome,
       sexo,
       data_nascimento,
-      idade,
       hobby,
     },
   });

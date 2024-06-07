@@ -6,19 +6,20 @@ import {
   deleteDesenvolvedorService,
 } from "../services/desenvolvedores.service";
 import { IDesenvolvedor } from "../types/types";
+import moment from "moment";
 
 export const getDesenvolvedores = async (req: Request, res: Response) => {
   try {
-    const { page = 1, per_page = 5, nome } = req.query;
+    const { page = 1, query } = req.query || {};
 
     const paginaAtual = parseInt(page as string) || 1;
-    const porPagina = parseInt(per_page as string) || 5;
+    const porPagina = 5;
 
     const skip = (paginaAtual - 1) * porPagina;
     const take = porPagina;
 
     const { desenvolvedores, total } = await getDesenvolvedoresService(
-      nome as string,
+      query as string,
       skip,
       take
     );
@@ -54,7 +55,7 @@ export const createDesenvolvedor = async (req: Request, res: Response) => {
       nivel_id,
       nome,
       sexo,
-      data_nascimento,
+      data_nascimento: moment(data_nascimento).toDate(),
       hobby,
     });
 
@@ -93,11 +94,16 @@ export const updateDesenvolvedor = async (req: Request, res: Response) => {
 };
 
 export const deleteDesenvolvedor = async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
+
+    if (!id)
+      return res.status(400).json({ error: "Erro ao remover desenvolvedor." });
+
     await deleteDesenvolvedorService(Number(id));
+
     res.status(204).send();
   } catch (error) {
-    res.status(400).json({ error: "Erro ao remover desenvolvedor." });
+    res.status(500).json({ error: "Erro ao remover desenvolvedor." });
   }
 };

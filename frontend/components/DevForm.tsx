@@ -19,7 +19,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { IDesenvolvedor, INivel } from "@/utils/types";
+import {
+  ICustomError,
+  IDesenvolvedor,
+  IGetNiveis,
+  INivel,
+} from "@/utils/types";
 import {
   Select,
   SelectContent,
@@ -30,7 +35,8 @@ import {
 import { Textarea } from "./ui/textarea";
 import { SelectWithSearch } from "./SelectWithSearch";
 import { DatePicker } from "./DatePicker";
-import { LevelService } from "@/services/LevelsService";
+import { getLevels } from "@/api/niveis";
+import { createDev, updateDev } from "@/api/desenvolvedores";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
@@ -59,6 +65,7 @@ const formSchema = z.object({
 export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
   const [loading, setLoading] = useState(false);
   const [niveis, setNiveis] = useState<INivel[]>([]);
+  const [query, setQuery] = useState("");
 
   const dialogRef = useRef<HTMLButtonElement>(null);
 
@@ -91,12 +98,16 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
         nivel_id,
       };
 
-      console.log(data);
+      if (id) {
+        await updateDev(data);
+        toast.success("Desenvolvedor atualizado com sucesso!");
+      } else {
+        await createDev(data);
+        toast.success("Novo desenvolvedor cadastrado!");
+      }
 
       dialogRef.current?.click();
       form.reset();
-
-      toast.success("Novo desenvolvedor cadastrado!");
     } catch (error) {
       toast.error("Erro ao cadastrar novo desenvolvedor.");
     } finally {
@@ -109,8 +120,18 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
   };
 
   useEffect(() => {
-    LevelService.getLevels().then((res: INivel[]) => setNiveis(res));
-  }, []);
+    getLevels({ query })
+      .then((data: IGetNiveis) => {
+        setNiveis(data.data);
+      })
+      .catch((error) => {
+        const customError = error as ICustomError;
+
+        toast.error(
+          customError?.response?.data?.error || "Erro ao buscar níveis"
+        );
+      });
+  }, [query]);
 
   return (
     <Dialog>

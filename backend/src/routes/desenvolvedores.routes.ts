@@ -8,9 +8,6 @@ import {
 
 const router = Router();
 
-// getDesenvolvedores,createDesenvolvedor,updateDesenvolvedor
-// deleteDesenvolvedor
-
 router.post("/desenvolvedores", createDesenvolvedor);
 router.get("/desenvolvedores", getDesenvolvedores);
 router.put("/desenvolvedores/:id", updateDesenvolvedor);

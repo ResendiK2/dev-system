@@ -6,11 +6,11 @@ import {
   updateNivel,
 } from "../controllers/niveis.controller";
 
-const router = Router();
+const routes = Router();
 
-router.get("/niveis", getNiveis);
-router.post("/niveis", createNivel);
-router.put("/niveis/:id", updateNivel);
-router.delete("/niveis/:id", deleteNivel);
+routes.get("/", getNiveis);
+routes.post("/", createNivel);
+routes.put("/:id", updateNivel);
+routes.delete("/:id", deleteNivel);
 
-export default router;
+export default routes;

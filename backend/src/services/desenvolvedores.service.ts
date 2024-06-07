@@ -1,10 +1,25 @@
 import prismaClient from "../prisma";
 import { IDesenvolvedor } from "../types/types";
 
-export const getDesenvolvedoresService = async () => {
-  return await prismaClient.desenvolvedor.findMany({
+export const getDesenvolvedoresService = async (
+  nome?: string,
+  skip: number = 0,
+  take: number = 10
+) => {
+  const where: any = nome
+    ? { nome: { contains: nome, mode: "insensitive" } }
+    : {};
+
+  const desenvolvedores = await prismaClient.desenvolvedor.findMany({
+    where,
+    skip,
+    take,
     include: { nivel: true },
   });
+
+  const total = await prismaClient.desenvolvedor.count({ where });
+
+  return { desenvolvedores, total };
 };
 
 export const createDesenvolvedorService = async ({

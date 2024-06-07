@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
+import { Inter as FontSans } from "next/font/google";
 
 import "./globals.css";
 
-import { Inter as FontSans } from "next/font/google";
-
 import { cn } from "@/lib/utils";
+import QueryClientProviderWrapper from "@/components/QueryClientProviderWrapper";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -29,7 +29,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
+        <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
       </body>
     </html>
   );

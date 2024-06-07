@@ -128,7 +128,7 @@ export const Columns: ColumnDef<IDesenvolvedor>[] = [
       );
     },
     cell: ({ row }) => {
-      const hobbies = row.getValue("hobby") as string;
+      const hobbies = (row.getValue("hobby") as string) || "";
 
       return (
         <TooltipProvider>
@@ -136,7 +136,12 @@ export const Columns: ColumnDef<IDesenvolvedor>[] = [
             <TooltipTrigger asChild>
               <div className='flex justify-center items-center'>
                 <Button variant='ghost' className='font-normal'>
-                  {hobbies.slice(0, 15) + "... (Pare o mouse para ver mais)"}
+                  {hobbies.length > 15
+                    ? `${(hobbies || "").slice(
+                        0,
+                        15
+                      )}... (Pare o mouse para ver mais)`
+                    : hobbies ?? "Sem hobbies"}
                 </Button>
               </div>
             </TooltipTrigger>

@@ -6,7 +6,7 @@ import { IDesenvolvedor } from "../types/types";
 export const getDesenvolvedoresService = async (
   nome?: string,
   skip: number = 0,
-  take: number = 10
+  take: number = 5
 ) => {
   const where: any = nome
     ? { nome: { contains: nome, mode: "insensitive" } }

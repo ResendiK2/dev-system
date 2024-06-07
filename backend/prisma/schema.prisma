@@ -17,8 +17,6 @@ model Nivel {
   id            Int             @id @default(autoincrement())
   nivel         String
   Desenvolvedor Desenvolvedor[]
-
-  @@map("niveis")
 }
 
 model Desenvolvedor {
@@ -29,6 +27,4 @@ model Desenvolvedor {
   hobby           String
   nivel           Nivel    @relation(fields: [nivel_id], references: [id])
   nivel_id        Int      @map("nivelId")
-
-  @@map("desenvolvedores")
 }

@@ -12,5 +12,6 @@ export interface IDesenvolvedor {
 export interface INivel {
   id?: number;
   nivel: string;
+  n_desenvolvedores?: number;
   Desenvolvedor?: IDesenvolvedor[];
 }

@@ -6,11 +6,11 @@ import {
   updateDesenvolvedor,
 } from "../controllers/desenvolvedores.controller";
 
-const router = Router();
+const routes = Router();
 
-router.post("/desenvolvedores", createDesenvolvedor);
-router.get("/desenvolvedores", getDesenvolvedores);
-router.put("/desenvolvedores/:id", updateDesenvolvedor);
-router.delete("/desenvolvedores/:id", deleteDesenvolvedor);
+routes.post("/", createDesenvolvedor);
+routes.get("/", getDesenvolvedores);
+routes.put("/:id", updateDesenvolvedor);
+routes.delete("/:id", deleteDesenvolvedor);
 
-export default router;
+export default routes;

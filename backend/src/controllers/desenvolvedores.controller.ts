@@ -44,16 +44,10 @@ export const getDesenvolvedores = async (req: Request, res: Response) => {
 
 export const createDesenvolvedor = async (req: Request, res: Response) => {
   try {
-    const {
-      nivel_id,
-      nome,
-      sexo,
-      data_nascimento,
-      idade,
-      hobby,
-    }: IDesenvolvedor = req.body;
+    const { nivel_id, nome, sexo, data_nascimento, hobby }: IDesenvolvedor =
+      req.body;
 
-    if (!nivel_id || !nome || !sexo || !data_nascimento || !idade || !hobby)
+    if (!nivel_id || !nome || !sexo || !data_nascimento || !hobby)
       return res.status(400).json({ error: "Dados inválidos." });
 
     const newDesenvolvedor = await createDesenvolvedorService({
@@ -61,7 +55,6 @@ export const createDesenvolvedor = async (req: Request, res: Response) => {
       nome,
       sexo,
       data_nascimento,
-      idade,
       hobby,
     });
 

@@ -15,3 +15,11 @@ export interface INivel {
   n_desenvolvedores?: number;
   Desenvolvedor?: IDesenvolvedor[];
 }
+
+export interface ICustomError {
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
+}

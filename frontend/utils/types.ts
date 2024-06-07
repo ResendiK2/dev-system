@@ -34,6 +34,7 @@ export interface IGetDesenvolvedores {
 }
 
 export interface ICustomError {
+  message?: string;
   response?: {
     data?: {
       error?: string;

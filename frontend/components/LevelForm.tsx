@@ -59,7 +59,7 @@ export function LevelForm({ nivel }: { nivel?: INivel }) {
 
       toast.success(
         id
-          ? `Nível ${nivel} atualizado com sucesso.`
+          ? `Nível atualizado com sucesso.`
           : `Nível ${nivel} cadastrado com sucesso.`
       );
 

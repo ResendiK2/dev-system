@@ -7,7 +7,7 @@ import { TableComponent } from "@/components/DataTable";
 import { Button } from "../../components/ui/button";
 import { Toaster } from "../../components/ui/sonner";
 
-import { INivel } from "../../utils/types";
+import { ICustomError } from "../../utils/types";
 
 import {
   Breadcrumb,
@@ -17,15 +17,35 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { columns } from "@/components/LevelColumns";
-import { LevelService } from "@/services/LevelsService";
 import { LevelForm } from "@/components/LevelForm";
+import { toast } from "sonner";
+import { getLevels } from "@/api/niveis";
+import { useQuery } from "@tanstack/react-query";
+import { Columns } from "@/components/LevelColumns";
 
 export default function Home() {
-  const [data, setData] = useState<INivel[]>();
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["devs", page],
+    queryFn: () => getLevels({ page, query }),
+  });
 
   useEffect(() => {
-    LevelService.getLevels().then((res: INivel[]) => setData(res));
+    if (!error) return;
+
+    const customError = error as ICustomError;
+
+    toast.error(customError?.response?.data?.error || "Erro ao buscar niveis");
+  }, [error]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query]);
+
+  useEffect(() => {
+    setQuery("");
   }, []);
 
   return (
@@ -53,7 +73,11 @@ export default function Home() {
       </div>
 
       <div className='border rounded-lg p-2'>
-        <TableComponent columns={columns} data={data || []} />
+        <TableComponent
+          columns={Columns}
+          data={data?.data ?? []}
+          isLoading={isLoading}
+        />
       </div>
 
       <Toaster position='top-right' />

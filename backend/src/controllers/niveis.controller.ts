@@ -5,6 +5,7 @@ import {
   getNiveisService,
   updateNivelService,
   deleteNivelService,
+  getNivelByNameService,
 } from "../services/niveis.service";
 
 import { getDesenvolvedorByNivelService } from "../services/desenvolvedores.service";
@@ -47,6 +48,13 @@ export const createNivel = async (req: Request, res: Response) => {
     const { nivel }: { nivel: string } = req.body;
 
     if (!nivel) return res.status(400).json({ error: "Dados inválidos." });
+
+    const alreadyExists = await getNivelByNameService(nivel);
+
+    if (alreadyExists)
+      return res
+        .status(409)
+        .json({ error: "Um nível com este nome já existe." });
 
     const newNivel = await createNivelService(nivel);
 

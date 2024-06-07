@@ -26,7 +26,6 @@ model Desenvolvedor {
   nome            String
   sexo            String   @db.Char(1)
   data_nascimento DateTime
-  idade           Int
   hobby           String
   nivel           Nivel    @relation(fields: [nivel_id], references: [id])
   nivel_id        Int      @map("nivelId")

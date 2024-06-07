@@ -11,12 +11,32 @@ import { getDesenvolvedorByNivelService } from "../services/desenvolvedores.serv
 
 export const getNiveis = async (req: Request, res: Response) => {
   try {
-    const niveis = await getNiveisService();
+    const { page = 1, per_page = 10, nome } = req.query;
 
-    if (!niveis?.length)
+    const paginaAtual = parseInt(page as string) || 1;
+    const porPagina = parseInt(per_page as string) || 10;
+
+    const skip = (paginaAtual - 1) * porPagina;
+    const take = porPagina;
+
+    const { niveis, total } = await getNiveisService(
+      nome as string,
+      skip,
+      take
+    );
+
+    if (!niveis.length)
       return res.status(404).json({ error: "Nenhum nível encontrado." });
 
-    return res.status(200).json(niveis);
+    res.status(200).json({
+      data: niveis,
+      meta: {
+        total,
+        per_page: porPagina,
+        current_page: paginaAtual,
+        last_page: Math.ceil(total / porPagina),
+      },
+    });
   } catch (error) {
     res.status(500).json({ error: "Erro ao buscar níveis." });
   }
@@ -30,7 +50,7 @@ export const createNivel = async (req: Request, res: Response) => {
 
     const newNivel = await createNivelService(nivel);
 
-    return res.status(201).json(newNivel);
+    res.status(201).json(newNivel);
   } catch (error) {
     return res.status(500).json({ error: "Erro ao criar nível." });
   }
@@ -49,7 +69,7 @@ export const updateNivel = async (req: Request, res: Response) => {
 
     const updatedNivel = await updateNivelService({ id: Number(id), nivel });
 
-    return res.status(200).json(updatedNivel);
+    res.status(200).json(updatedNivel);
   } catch (error) {
     return res.status(500).json({ error: "Erro ao atualizar nível." });
   }
@@ -68,7 +88,7 @@ export const deleteNivel = async (req: Request, res: Response) => {
 
     await deleteNivelService(Number(id));
 
-    return res.status(204).send();
+    res.status(204).send();
   } catch (error) {
     return res.status(400).json({ error: "Erro ao remover nível." });
   }

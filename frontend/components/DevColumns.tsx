@@ -87,11 +87,15 @@ export const Columns: ColumnDef<IDesenvolvedor>[] = [
         </div>
       );
     },
-    cell: ({ row }) => (
-      <div className='text-center'>
-        {format(row.getValue("data_nascimento"), "dd/MM/yyyy")}
-      </div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <div className='text-center'>
+          {row.getValue("data_nascimento")
+            ? format(row.getValue("data_nascimento"), "dd/MM/yyyy")
+            : "Data não informada"}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "idade",
@@ -141,7 +145,7 @@ export const Columns: ColumnDef<IDesenvolvedor>[] = [
                         0,
                         15
                       )}... (Pare o mouse para ver mais)`
-                    : hobbies ?? "Sem hobbies"}
+                    : hobbies ?? "Hobbies não informados"}
                 </Button>
               </div>
             </TooltipTrigger>
@@ -167,7 +171,7 @@ export const Columns: ColumnDef<IDesenvolvedor>[] = [
 
       return (
         <div className='flex justify-center items-center space-x-2'>
-          <DeleteConfirmation id={+row.id} type='desenvolvedor' />
+          <DeleteConfirmation id={desenvolvedor.id} type='desenvolvedor' />
 
           <DevForm desenvolvedor={desenvolvedor} />
         </div>

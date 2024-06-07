@@ -36,7 +36,7 @@ export function DeleteConfirmation({ id, type }: { id: number; type: string }) {
         case "desenvolvedor":
           await deleteDev(id);
           break;
-        case "nível":
+        case "nivel":
           await deleteLevel(id);
           break;
         default:

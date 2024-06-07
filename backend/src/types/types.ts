@@ -4,7 +4,7 @@ export interface IDesenvolvedor {
   nome: string;
   sexo: string;
   data_nascimento: Date;
-  idade: number;
+  idade?: number;
   hobby: string;
   nivel?: INivel;
 }

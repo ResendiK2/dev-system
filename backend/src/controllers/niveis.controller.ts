@@ -11,10 +11,10 @@ import { getDesenvolvedorByNivelService } from "../services/desenvolvedores.serv
 
 export const getNiveis = async (req: Request, res: Response) => {
   try {
-    const { page = 1, per_page = 10, nome } = req.query;
+    const { page = 1, per_page = 5, nome } = req.query;
 
     const paginaAtual = parseInt(page as string) || 1;
-    const porPagina = parseInt(per_page as string) || 10;
+    const porPagina = parseInt(per_page as string) || 5;
 
     const skip = (paginaAtual - 1) * porPagina;
     const take = porPagina;

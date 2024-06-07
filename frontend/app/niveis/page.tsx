@@ -23,7 +23,7 @@ import { getLevels } from "@/api/niveis";
 import { useQuery } from "@tanstack/react-query";
 import { Columns } from "@/components/LevelColumns";
 
-export default function Home() {
+export default function Niveis() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
 

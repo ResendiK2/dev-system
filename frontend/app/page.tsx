@@ -1,32 +1,46 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import { Button } from "../components/ui/button";
-import { Toaster } from "../components/ui/sonner";
-import { DevForm } from "../components/DevForm";
-
-import { IDesenvolvedor } from "../utils/types";
-import { TableComponent } from "@/components/DataTable";
-import { columns } from "@/components/DevColumns";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
-import { DevService } from "@/services/DevService";
+import { Button } from "../components/ui/button";
+import { Columns } from "@/components/DevColumns";
+import { DevForm } from "../components/DevForm";
+import { TableComponent } from "@/components/DataTable";
+import { Toaster } from "../components/ui/sonner";
+
+import { getDevs } from "@/api/desenvolvedores";
+import { ICustomError } from "@/utils/types";
 
 export default function Desenvolvedores() {
-  const [data, setData] = useState<IDesenvolvedor[]>();
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["devs", page, limit],
+    queryFn: () => getDevs(page, limit),
+  });
 
   useEffect(() => {
-    DevService.getDevs().then((res: IDesenvolvedor[]) => setData(res));
-  }, []);
+    if (!error) return;
+
+    const customError = error as ICustomError;
+
+    toast.error(
+      customError?.response?.data?.error || "Erro ao buscar desenvolvedores"
+    );
+  }, [error]);
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
-      <h1 className='text-3xl font-bold'>Dev System</h1>
+      <h1 className='text-3xl font-bold text-blue-600'>Dev System</h1>
 
       <Breadcrumb>
         <BreadcrumbList>
@@ -45,7 +59,11 @@ export default function Desenvolvedores() {
       </div>
 
       <div className='border rounded-lg p-2'>
-        <TableComponent columns={columns} data={data || []} />
+        <TableComponent
+          columns={Columns}
+          data={data?.data ?? []}
+          isLoading={isLoading}
+        />
       </div>
 
       <Toaster position='top-right' />

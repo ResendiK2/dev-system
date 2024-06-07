@@ -24,13 +24,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Spinner } from "./Spinner";
+import { TextSelect } from "lucide-react";
 
 export function TableComponent({
   columns,
   data,
+  isLoading,
 }: {
   columns: ColumnDef<any>[];
   data: any[];
+  isLoading?: boolean;
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -92,9 +96,9 @@ export function TableComponent({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+          {!table.getRowModel().rows?.length ? null : (
+            <TableBody>
+              {table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -108,20 +112,30 @@ export function TableComponent({
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className='h-24 text-center'
-                >
-                  Nenhum item encontrado
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </div>
+
+      {!table.getRowModel().rows?.length ? (
+        <div>
+          {isLoading ? (
+            <div className='flex-1 flex flex-col justify-center items-center my-20 space-y-2'>
+              <Spinner />
+              <p className='text-blue-600 text-lg'>Carregando...</p>
+            </div>
+          ) : (
+            <div className='flex-1 flex flex-col justify-center items-center my-20 space-y-2'>
+              <TextSelect className='h-12 w-12 text-blue-600' />
+
+              <p className='text-blue-600 text-lg'>
+                Nenhum registro encontrado
+              </p>
+            </div>
+          )}
+        </div>
+      ) : null}
 
       <div className='flex items-center justify-end ml-2 space-x-2 py-4'>
         <div className='space-x-2'>

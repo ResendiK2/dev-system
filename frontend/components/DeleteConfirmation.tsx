@@ -14,25 +14,45 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { Spinner } from "./Spinner";
+
+import { deleteDev } from "@/api/desenvolvedores";
+import { deleteLevel } from "@/api/niveis";
+
+import { ICustomError } from "@/utils/types";
 
 export function DeleteConfirmation({ id, type }: { id: number; type: string }) {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dialogRef = useRef<HTMLButtonElement>(null);
 
   const handleDelete = async () => {
-    setLoading(true);
+    setIsLoading(true);
 
     try {
-      console.log(`Excluindo ${type} com id ${id}`);
+      if (!id) throw new Error("Dados inválidos.");
 
-      toast.success(
-        `${type.charAt(0).toUpperCase() + type.slice(1)} excluído com sucesso.`
-      );
+      switch (type) {
+        case "desenvolvedor":
+          await deleteDev(id);
+          break;
+        case "nível":
+          await deleteLevel(id);
+          break;
+        default:
+          throw new Error("Tipo inválido.");
+      }
+
+      toast.success(`Sucesso ao excluir ${type}.`);
     } catch (error) {
-      toast.error(`Erro ao excluir ${type}.`);
+      const customError = error as ICustomError;
+      toast.error(
+        customError?.response?.data?.error ||
+          customError?.message ||
+          `Erro ao excluir ${type}.`
+      );
     } finally {
-      setLoading(false);
+      setIsLoading(false);
       dialogRef.current?.click();
     }
   };
@@ -46,16 +66,17 @@ export function DeleteConfirmation({ id, type }: { id: number; type: string }) {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Tem certeza que deseja excluir este {type}?</DialogTitle>
-        <DialogFooter className='mt-5'>
+        <DialogFooter className='flex items-center mt-5'>
+          {isLoading ? <Spinner /> : null}
           <DialogClose asChild>
-            <Button disabled={loading} variant='outline'>
+            <Button disabled={isLoading} variant='outline'>
               Cancelar
             </Button>
           </DialogClose>
           <Button
             type='submit'
             variant='destructive'
-            disabled={loading}
+            disabled={isLoading}
             onClick={handleDelete}
           >
             Excluir

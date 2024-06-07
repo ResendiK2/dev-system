@@ -5,17 +5,17 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Button } from "./ui/button";
 import { DeleteConfirmation } from "./DeleteConfirmation";
-
-import { INivel } from "@/utils/types";
+import { LevelForm } from "./LevelForm";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { LevelForm } from "./LevelForm";
 
-export const columns: ColumnDef<INivel>[] = [
+import { INivel } from "@/utils/types";
+
+export const Columns: ColumnDef<INivel>[] = [
   {
     accessorKey: "nivel",
     header: ({ column }) => {
@@ -63,7 +63,7 @@ export const columns: ColumnDef<INivel>[] = [
       return (
         <div className='flex justify-center items-center space-x-2'>
           {nivel.n_desenvolvedores === 0 ? (
-            <DeleteConfirmation id={+row.id} type='nivel' />
+            <DeleteConfirmation id={nivel.id} type='nivel' />
           ) : (
             <TooltipProvider>
               <Tooltip>

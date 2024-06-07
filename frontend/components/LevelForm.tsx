@@ -20,6 +20,8 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { INivel } from "@/utils/types";
+import { Spinner } from "./Spinner";
+import { createLevel, updateLevel } from "@/api/niveis";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
@@ -29,7 +31,7 @@ const formSchema = z.object({
 });
 
 export function LevelForm({ nivel }: { nivel?: INivel }) {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dialogRef = useRef<HTMLButtonElement>(null);
 
@@ -45,23 +47,28 @@ export function LevelForm({ nivel }: { nivel?: INivel }) {
     try {
       const { id, nivel } = values as INivel;
 
-      setLoading(true);
+      setIsLoading(true);
 
       const data: INivel = {
         id,
         nivel,
       };
 
-      console.log(data);
+      if (id) await updateLevel(data);
+      else await createLevel(data);
+
+      toast.success(
+        id
+          ? `Nível ${nivel} atualizado com sucesso.`
+          : `Nível ${nivel} cadastrado com sucesso.`
+      );
 
       dialogRef.current?.click();
       form.reset();
-
-      toast.success("Novo nível cadastrado com sucesso.");
     } catch (error) {
       toast.error("Erro ao cadastrar novo nível.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -95,7 +102,7 @@ export function LevelForm({ nivel }: { nivel?: INivel }) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
             <FormField
-              disabled={loading}
+              disabled={isLoading}
               control={form.control}
               name='nivel'
               render={({ field }) => (
@@ -108,17 +115,18 @@ export function LevelForm({ nivel }: { nivel?: INivel }) {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className='flex items-center mt-5'>
+              {isLoading ? <Spinner /> : null}
               <DialogClose asChild>
                 <Button
-                  disabled={loading}
+                  disabled={isLoading}
                   variant='outline'
                   onClick={() => form.reset()}
                 >
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type='submit' disabled={loading}>
+              <Button type='submit' disabled={isLoading}>
                 Salvar
               </Button>
             </DialogFooter>

@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 
-export const columns: ColumnDef<IDesenvolvedor>[] = [
+export const Columns: ColumnDef<IDesenvolvedor>[] = [
   {
     accessorKey: "nome",
     header: ({ column }) => {

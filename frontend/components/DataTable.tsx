@@ -68,10 +68,10 @@ export function TableComponent({
       <div className='flex justify-end items-center  ml-1 py-4'>
         <Input
           placeholder='Buscar...'
-          value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("nome")?.setFilterValue(event.target.value)
-          }
+          // value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
+          // onChange={(event) =>
+          //   table.getColumn("nome")?.setFilterValue(event.target.value)
+          // }
           className='max-w-sm'
         />
       </div>

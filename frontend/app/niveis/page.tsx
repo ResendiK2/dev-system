@@ -24,31 +24,39 @@ import { useQuery } from "@tanstack/react-query";
 import { Columns } from "@/components/LevelColumns";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/Pagination";
+import { debounce } from "lodash";
 
 export default function Niveis() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["devs", page],
-    queryFn: () => getLevels({ page, query }),
-  });
-
-  useEffect(() => {
-    if (!error) return;
-
-    const customError = error as ICustomError;
-
-    toast.error(customError?.response?.data?.error || "Erro ao buscar niveis");
-  }, [error]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [query]);
-
   useEffect(() => {
     setQuery("");
   }, []);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["niveis", page, query],
+    queryFn: () => getLevels({ page, query }),
+    staleTime: 300000,
+  });
+
+  useEffect(() => {
+    if (error) {
+      const customError = error as ICustomError;
+      toast.error(
+        customError?.response?.data?.error ||
+          customError?.message ||
+          "Erro ao buscar niveis"
+      );
+    }
+  }, [error]);
+
+  const handleSearchChange = debounce(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(e.target.value);
+    },
+    500
+  );
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
@@ -76,7 +84,12 @@ export default function Niveis() {
 
       <div className='border rounded-lg p-2'>
         <div className='flex justify-end items-center  ml-1 py-4'>
-          <Input placeholder='Buscar...' className='max-w-sm' />
+          <Input
+            placeholder='Buscar...'
+            className='max-w-sm'
+            value={query}
+            onChange={handleSearchChange}
+          />
         </div>
 
         <TableComponent

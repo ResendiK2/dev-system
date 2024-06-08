@@ -32,6 +32,12 @@ export const getDesenvolvedoresService = async (
   return { desenvolvedores, total };
 };
 
+export const getDesenvolvedorByIdService = async (id: number) => {
+  return await prismaClient.desenvolvedor.findFirst({
+    where: { id },
+  });
+};
+
 export const createDesenvolvedorService = async ({
   nivel_id,
   nome,

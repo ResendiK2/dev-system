@@ -99,7 +99,12 @@ export function DeleteConfirmation({
 
       toast.success(`Sucesso ao excluir ${type}.`);
     } catch (error) {
+      queryClient.invalidateQueries({
+        queryKey: [type === "desenvolvedor" ? "devs" : "niveis"],
+      });
+
       const customError = error as ICustomError;
+
       toast.error(
         customError?.response?.data?.error ||
           customError?.message ||

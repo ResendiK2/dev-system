@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+import { debounce } from "lodash";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Breadcrumb,
@@ -20,45 +22,39 @@ import { Toaster } from "../components/ui/sonner";
 
 import { getDevs } from "@/api/desenvolvedores";
 
-import {
-  ICustomError,
-  IDesenvolvedor,
-  IGetDesenvolvedores,
-} from "@/utils/types";
+import { ICustomError, IDesenvolvedor } from "@/utils/types";
 
 export default function Desenvolvedores() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
-  const [data, setData] = useState<IGetDesenvolvedores>(
-    {} as IGetDesenvolvedores
-  );
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setPage(1);
-  }, [query]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    getDevs(page, query)
-      .then((response: IGetDesenvolvedores) => {
-        setData(response);
-      })
-      .catch((error) => {
-        const customError = error as ICustomError;
-
-        toast.error(
-          customError?.response?.data?.error || "Erro ao buscar desenvolvedores"
-        );
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [page, query]);
 
   useEffect(() => {
     setQuery("");
   }, []);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["devs", page, query],
+    queryFn: () => getDevs({ page, query }),
+    staleTime: 300000,
+  });
+
+  useEffect(() => {
+    if (error) {
+      const customError = error as ICustomError;
+      toast.error(
+        customError?.response?.data?.error ||
+          customError?.message ||
+          "Erro ao buscar desenvolvedores"
+      );
+    }
+  }, [error]);
+
+  const handleSearchChange = debounce(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(e.target.value);
+    },
+    500
+  );
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
@@ -76,13 +72,17 @@ export default function Desenvolvedores() {
         <a href='/niveis'>
           <Button variant='outline'>Ver Niveis</Button>
         </a>
-
         <DevForm />
       </div>
 
       <div className='border rounded-lg p-2'>
-        <div className='flex justify-end items-center  ml-1 py-4'>
-          <Input placeholder='Buscar...' className='max-w-sm' />
+        <div className='flex justify-end items-center ml-1 py-4'>
+          <Input
+            placeholder='Buscar...'
+            className='max-w-sm'
+            value={query}
+            onChange={handleSearchChange}
+          />
         </div>
 
         <TableComponent
@@ -96,7 +96,7 @@ export default function Desenvolvedores() {
 
         <Pagination
           isLoading={isLoading}
-          paginationData={data.meta}
+          paginationData={data?.meta}
           setPage={setPage}
         />
       </div>

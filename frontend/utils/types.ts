@@ -1,19 +1,32 @@
 export interface IDesenvolvedor {
-  id?: number | null;
+  id: number | null;
   nivel_id: number;
   nome: string;
   sexo: string;
   data_nascimento: Date | string;
-  idade?: number;
+  idade: number;
   hobby: string;
-  nivel?: INivel;
+  nivel: INivel;
+}
+
+export interface IDesenvolvedorBody {
+  id?: number;
+  nivel_id: number;
+  nome: string;
+  sexo: string;
+  data_nascimento: Date | string;
+  hobby: string;
 }
 
 export interface INivel {
+  id: number;
+  nivel: string;
+  n_desenvolvedores: number;
+}
+
+export interface INivelBody {
   id?: number;
   nivel: string;
-  n_desenvolvedores?: number;
-  Desenvolvedor?: IDesenvolvedor[];
 }
 
 export interface IMeta {

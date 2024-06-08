@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 import { debounce } from "lodash";
-import { toast } from "sonner";
 
 import { Button } from "../../components/ui/button";
 import {
@@ -23,8 +22,6 @@ import { Toaster } from "../../components/ui/sonner";
 
 import { useLevels } from "@/hooks/useLevels";
 
-import { ICustomError } from "../../utils/types";
-
 export default function Niveis() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
@@ -33,18 +30,7 @@ export default function Niveis() {
     setQuery("");
   }, []);
 
-  const { data, isLoading, error } = useLevels({ page, query });
-
-  useEffect(() => {
-    if (error) {
-      const customError = error as ICustomError;
-      toast.error(
-        customError?.response?.data?.error ||
-          customError?.message ||
-          "Erro ao buscar niveis"
-      );
-    }
-  }, [error]);
+  const { data, isLoading } = useLevels({ page, query });
 
   const handleSearchChange = debounce(
     (e: React.ChangeEvent<HTMLInputElement>) => {

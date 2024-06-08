@@ -1,5 +1,5 @@
 export interface IDesenvolvedor {
-  id: number | null;
+  id: number;
   nivel_id: number;
   nome: string;
   sexo: string;

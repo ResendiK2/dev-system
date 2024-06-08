@@ -34,11 +34,7 @@ import { Textarea } from "./ui/textarea";
 
 import { createDev, updateDev } from "@/api/desenvolvedores";
 
-import {
-  IDesenvolvedor,
-  IDesenvolvedorBody,
-  IGetDesenvolvedores,
-} from "@/utils/types";
+import { IDesenvolvedor, IDesenvolvedorBody } from "@/utils/types";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
@@ -76,71 +72,8 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
 
   const { mutateAsync } = useMutation({
     mutationFn: desenvolvedor?.id ? updateDev : createDev,
-    onSuccess: (data) => {
-      let cached = queryClient.getQueryData<IGetDesenvolvedores>([
-        "devs",
-        1,
-        "",
-      ]);
-
-      if (!cached) return;
-
-      if (!desenvolvedor?.id) {
-        if (cached.meta.total < cached.meta.per_page) {
-          const newData: IDesenvolvedor[] = cached.data;
-          newData.push(data);
-
-          queryClient.setQueryData<IGetDesenvolvedores>(["devs", 1, ""], {
-            ...cached,
-            data: newData,
-          });
-
-          return;
-        }
-
-        cached = queryClient.getQueryData<IGetDesenvolvedores>([
-          "devs",
-          cached.meta.last_page,
-          "",
-        ]);
-
-        if (!cached) return;
-
-        if (cached.meta.total == cached.meta.per_page) return;
-
-        const newData: IDesenvolvedor[] = cached.data;
-
-        newData.push(data);
-
-        queryClient.setQueryData<IGetDesenvolvedores>(
-          ["devs", cached.meta.last_page, ""],
-          {
-            ...cached,
-            data: newData,
-          }
-        );
-
-        return;
-      }
-
-      Array.from({ length: cached.meta.last_page }).forEach((_, index) => {
-        cached = queryClient.getQueryData<IGetDesenvolvedores>([
-          "devs",
-          index + 1,
-          "",
-        ]);
-
-        if (!cached) return;
-
-        const newData = cached.data.map((dev) =>
-          dev.id === data.id ? data : dev
-        );
-
-        queryClient.setQueryData<IGetDesenvolvedores>(["devs", index + 1, ""], {
-          ...cached,
-          data: newData,
-        });
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["devs"] });
     },
   });
 

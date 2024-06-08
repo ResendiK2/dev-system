@@ -3,8 +3,9 @@
 import { useRef, useState } from "react";
 
 import { Edit, PlusCircle } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -23,7 +24,7 @@ import { Spinner } from "./Spinner";
 
 import { createLevel, updateLevel } from "@/api/niveis";
 
-import { ICustomError, INivel } from "@/utils/types";
+import { ICustomError, INivel, INivelBody } from "@/utils/types";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
@@ -45,19 +46,28 @@ export function LevelForm({ nivel }: { nivel?: INivel }) {
     },
   });
 
+  const queryClient = useQueryClient();
+
+  const { mutateAsync } = useMutation({
+    mutationFn: nivel?.id ? updateLevel : createLevel,
+    onSuccess: () => {
+      if (nivel?.id) queryClient.invalidateQueries({ queryKey: ["devs"] });
+      queryClient.invalidateQueries({ queryKey: ["niveis"] });
+    },
+  });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const { id, nivel } = values as INivel;
 
       setIsLoading(true);
 
-      const data: INivel = {
+      const data: INivelBody = {
         id,
         nivel,
       };
 
-      if (id) await updateLevel(data);
-      else await createLevel(data);
+      await mutateAsync(data);
 
       toast.success(
         id

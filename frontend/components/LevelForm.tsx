@@ -2,15 +2,13 @@
 
 import { useRef, useState } from "react";
 
-import { z } from "zod";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit, PlusCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import {
   Dialog,
   DialogClose,
@@ -19,9 +17,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { INivel } from "@/utils/types";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import { Input } from "./ui/input";
 import { Spinner } from "./Spinner";
+
 import { createLevel, updateLevel } from "@/api/niveis";
+
+import { ICustomError, INivel } from "@/utils/types";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
@@ -66,7 +68,13 @@ export function LevelForm({ nivel }: { nivel?: INivel }) {
       dialogRef.current?.click();
       form.reset();
     } catch (error) {
-      toast.error("Erro ao cadastrar novo nível.");
+      const customError = error as ICustomError;
+
+      toast.error(
+        customError?.response?.data?.error ||
+          customError.message ||
+          "Erro ao cadastrar novo nível."
+      );
     } finally {
       setIsLoading(false);
     }

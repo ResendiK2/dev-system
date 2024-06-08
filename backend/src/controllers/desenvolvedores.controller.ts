@@ -31,22 +31,24 @@ const validateFields = ({
   if (checkId && (Number.isNaN(Number(id)) || Number(id) < 1))
     return { error: "Id inválido." };
 
-  if (nome?.length < 3) return { error: "Nome inválido." };
+  if (!nome?.length || nome.length < 3 || nome.length > 100)
+    return { error: "Nome inválido." };
 
   if (!["M", "F"].includes(sexo)) return { error: "Sexo inválido." };
 
-  if (!Number.isNaN(Number(nivel_id)) || Number(nivel_id) < 1)
+  if (Number.isNaN(Number(nivel_id)) || Number(nivel_id) < 1)
     return { error: "Nível inválido." };
 
-  if (!moment(data_nascimento).isValid())
+  if (!data_nascimento || !moment(data_nascimento).isValid())
     return { error: "Data de nascimento inválida." };
 
-  if (hobby.length < 3) return { error: "Hobby inválido." };
+  if (!hobby?.length || hobby.length < 3 || hobby.length > 300)
+    return { error: "Hobby inválido." };
 };
 
 export const getDesenvolvedores = async (req: Request, res: Response) => {
   try {
-    const { page = 1, query } = req.query || {};
+    const { page = 1, query = "" } = req.query || {};
 
     const paginaAtual = parseInt(page as string) || 1;
     const porPagina = 10;
@@ -129,7 +131,7 @@ export const updateDesenvolvedor = async (req: Request, res: Response) => {
 
     res.status(200).json(updatedDesenvolvedor);
   } catch (error) {
-    res.status(400).json({ error: "Erro ao atualizar desenvolvedor." });
+    res.status(500).json({ error: "Erro ao atualizar desenvolvedor." });
   }
 };
 
@@ -137,10 +139,8 @@ export const deleteDesenvolvedor = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    if (!id)
-      return res
-        .status(400)
-        .json({ error: "Id do desenvolvedor é obrigatório." });
+    if (!id || Number.isNaN(Number(id)))
+      return res.status(400).json({ error: "Id inválido." });
 
     const devExists = await getDesenvolvedorByIdService(Number(id));
 

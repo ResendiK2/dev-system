@@ -6,6 +6,7 @@ import {
   updateNivelService,
   deleteNivelService,
   getNivelByNameService,
+  getNivelByIdService,
 } from "../services/niveis.service";
 
 import { getDesenvolvedorByNivelService } from "../services/desenvolvedores.service";
@@ -47,7 +48,8 @@ export const createNivel = async (req: Request, res: Response) => {
   try {
     const { nivel }: { nivel: string } = req.body;
 
-    if (!nivel) return res.status(400).json({ error: "Dados inválidos." });
+    if (!nivel)
+      return res.status(400).json({ error: "O campo 'nivel' é obrigatório." });
 
     const alreadyExists = await getNivelByNameService(nivel);
 
@@ -73,7 +75,15 @@ export const updateNivel = async (req: Request, res: Response) => {
       nivel: string;
     } = req.body;
 
-    if (!nivel) return res.status(400).json({ error: "Dados inválidos." });
+    if (!nivel || !id)
+      return res
+        .status(400)
+        .json({ error: "Campos obrigatórios não preenchidos." });
+
+    const alreadyExists = await getNivelByIdService(Number(id));
+
+    if (!alreadyExists)
+      return res.status(404).json({ error: "Nível não encontrado." });
 
     const updatedNivel = await updateNivelService({ id: Number(id), nivel });
 
@@ -87,12 +97,20 @@ export const deleteNivel = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
+    if (!id)
+      return res.status(400).json({ error: "Id do nível é obrigatório." });
+
     const desenvolvedores = await getDesenvolvedorByNivelService(Number(id));
 
     if (desenvolvedores?.length)
       return res
-        .status(400)
+        .status(409)
         .json({ error: "Este nível possui desenvolvedores associados." });
+
+    const alreadyExists = await getNivelByIdService(Number(id));
+
+    if (!alreadyExists)
+      return res.status(404).json({ error: "Nível não encontrado." });
 
     const deletedNivel = await deleteNivelService(Number(id));
 

@@ -22,6 +22,8 @@ import { toast } from "sonner";
 import { getLevels } from "@/api/niveis";
 import { useQuery } from "@tanstack/react-query";
 import { Columns } from "@/components/LevelColumns";
+import { Input } from "@/components/ui/input";
+import { Pagination } from "@/components/Pagination";
 
 export default function Niveis() {
   const [page, setPage] = useState(1);
@@ -73,10 +75,20 @@ export default function Niveis() {
       </div>
 
       <div className='border rounded-lg p-2'>
+        <div className='flex justify-end items-center  ml-1 py-4'>
+          <Input placeholder='Buscar...' className='max-w-sm' />
+        </div>
+
         <TableComponent
           columns={Columns}
           data={data?.data ?? []}
           isLoading={isLoading}
+        />
+
+        <Pagination
+          isLoading={isLoading}
+          paginationData={data?.meta}
+          setPage={setPage}
         />
       </div>
 

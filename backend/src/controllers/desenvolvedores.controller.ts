@@ -21,11 +21,11 @@ export const getDesenvolvedores = async (req: Request, res: Response) => {
     const skip = (paginaAtual - 1) * porPagina;
     const take = porPagina;
 
-    const { desenvolvedores, total } = await getDesenvolvedoresService(
-      query as string,
+    const { desenvolvedores, total } = await getDesenvolvedoresService({
+      query: query as string,
       skip,
-      take
-    );
+      take,
+    });
 
     if (!desenvolvedores.length)
       return res

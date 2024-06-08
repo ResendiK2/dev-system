@@ -3,13 +3,17 @@ import moment from "moment";
 import prismaClient from "../prisma";
 import { IDesenvolvedor } from "../types/types";
 
-export const getDesenvolvedoresService = async (
-  nome?: string,
-  skip: number = 0,
-  take: number = 10
-) => {
-  const where: any = nome
-    ? { nome: { contains: nome, mode: "insensitive" } }
+export const getDesenvolvedoresService = async ({
+  query,
+  skip = 0,
+  take = 10,
+}: {
+  query?: string;
+  skip: number;
+  take: number;
+}) => {
+  const where: any = query
+    ? { nome: { contains: query, mode: "insensitive" } }
     : {};
 
   const desenvolvedores = await prismaClient.desenvolvedor.findMany({

@@ -2,13 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import { TableComponent } from "@/components/DataTable";
+import { debounce } from "lodash";
+import { toast } from "sonner";
 
 import { Button } from "../../components/ui/button";
-import { Toaster } from "../../components/ui/sonner";
-
-import { ICustomError } from "../../utils/types";
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,14 +14,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { LevelForm } from "@/components/LevelForm";
-import { toast } from "sonner";
-import { getLevels } from "@/api/niveis";
-import { useQuery } from "@tanstack/react-query";
 import { Columns } from "@/components/LevelColumns";
 import { Input } from "@/components/ui/input";
+import { LevelForm } from "@/components/LevelForm";
 import { Pagination } from "@/components/Pagination";
-import { debounce } from "lodash";
+import { TableComponent } from "@/components/DataTable";
+import { Toaster } from "../../components/ui/sonner";
+
+import { useLevels } from "@/hooks/useLevels";
+
+import { ICustomError } from "../../utils/types";
 
 export default function Niveis() {
   const [page, setPage] = useState(1);
@@ -34,11 +33,7 @@ export default function Niveis() {
     setQuery("");
   }, []);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["niveis", page, query],
-    queryFn: () => getLevels({ page, query }),
-    staleTime: 300000,
-  });
+  const { data, isLoading, error } = useLevels({ page, query });
 
   useEffect(() => {
     if (error) {

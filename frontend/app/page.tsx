@@ -1,8 +1,8 @@
 "use client";
 
-import { toast } from "sonner";
 import { useEffect, useState } from "react";
-// import { useQuery } from "@tanstack/react-query";
+
+import { toast } from "sonner";
 
 import {
   Breadcrumb,
@@ -13,10 +13,13 @@ import {
 import { Button } from "../components/ui/button";
 import { Columns } from "@/components/DevColumns";
 import { DevForm } from "../components/DevForm";
+import { Input } from "@/components/ui/input";
+import { Pagination } from "@/components/Pagination";
 import { TableComponent } from "@/components/DataTable";
 import { Toaster } from "../components/ui/sonner";
 
 import { getDevs } from "@/api/desenvolvedores";
+
 import {
   ICustomError,
   IDesenvolvedor,
@@ -30,21 +33,6 @@ export default function Desenvolvedores() {
     {} as IGetDesenvolvedores
   );
   const [isLoading, setIsLoading] = useState(true);
-
-  // const { data, error, isLoading } = useQuery({
-  //   queryKey: ["devs", page],
-  //   queryFn: () => getDevs(page, query),
-  // });
-
-  // useEffect(() => {
-  //   if (!error) return;
-
-  //   const customError = error as ICustomError;
-
-  //   toast.error(
-  //     customError?.response?.data?.error || "Erro ao buscar desenvolvedores"
-  //   );
-  // }, [error]);
 
   useEffect(() => {
     setPage(1);
@@ -93,6 +81,10 @@ export default function Desenvolvedores() {
       </div>
 
       <div className='border rounded-lg p-2'>
+        <div className='flex justify-end items-center  ml-1 py-4'>
+          <Input placeholder='Buscar...' className='max-w-sm' />
+        </div>
+
         <TableComponent
           columns={Columns}
           data={(data?.data ?? []).map((dev: IDesenvolvedor) => ({
@@ -100,6 +92,12 @@ export default function Desenvolvedores() {
             nivel: dev?.nivel?.nivel,
           }))}
           isLoading={isLoading}
+        />
+
+        <Pagination
+          isLoading={isLoading}
+          paginationData={data.meta}
+          setPage={setPage}
         />
       </div>
 

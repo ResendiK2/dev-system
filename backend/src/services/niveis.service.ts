@@ -2,13 +2,17 @@ import prismaClient from "../prisma";
 
 import { INivel } from "../types/types";
 
-export const getNiveisService = async (
-  nome?: string,
-  skip: number = 0,
-  take: number = 10
-) => {
-  const where: any = nome
-    ? { nome: { contains: nome, mode: "insensitive" } }
+export const getNiveisService = async ({
+  query,
+  skip = 0,
+  take = 10,
+}: {
+  query?: string;
+  skip: number;
+  take: number;
+}) => {
+  const where: any = query
+    ? { nivel: { contains: query, mode: "insensitive" } }
     : {};
 
   const niveis = await prismaClient.nivel.findMany({

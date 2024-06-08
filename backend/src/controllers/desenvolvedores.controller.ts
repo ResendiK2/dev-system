@@ -11,6 +11,39 @@ import {
 
 import { IDesenvolvedor } from "../types/types";
 
+const validateFields = ({
+  id,
+  checkId,
+  nivel_id,
+  nome,
+  sexo,
+  data_nascimento,
+  hobby,
+}: {
+  id: string;
+  checkId: boolean;
+  nivel_id: string;
+  nome: string;
+  sexo: string;
+  data_nascimento: string;
+  hobby: string;
+}) => {
+  if (checkId && (Number.isNaN(Number(id)) || Number(id) < 1))
+    return { error: "Id inválido." };
+
+  if (nome?.length < 3) return { error: "Nome inválido." };
+
+  if (!["M", "F"].includes(sexo)) return { error: "Sexo inválido." };
+
+  if (!Number.isNaN(Number(nivel_id)) || Number(nivel_id) < 1)
+    return { error: "Nível inválido." };
+
+  if (!moment(data_nascimento).isValid())
+    return { error: "Data de nascimento inválida." };
+
+  if (hobby.length < 3) return { error: "Hobby inválido." };
+};
+
 export const getDesenvolvedores = async (req: Request, res: Response) => {
   try {
     const { page = 1, query } = req.query || {};
@@ -51,10 +84,8 @@ export const createDesenvolvedor = async (req: Request, res: Response) => {
     const { nivel_id, nome, sexo, data_nascimento, hobby }: IDesenvolvedor =
       req.body;
 
-    if (!nivel_id || !nome || !sexo || !data_nascimento || !hobby)
-      return res
-        .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos." });
+    if (validateFields(req.body))
+      return res.status(400).json(validateFields(req.body));
 
     const newDesenvolvedor = await createDesenvolvedorService({
       nivel_id,
@@ -77,10 +108,10 @@ export const updateDesenvolvedor = async (req: Request, res: Response) => {
     const { nome, hobby, nivel_id, sexo, data_nascimento }: IDesenvolvedor =
       req.body;
 
-    if (!id || !nome || !hobby || !nivel_id || !sexo || !data_nascimento)
+    if (validateFields({ ...req.body, id, checkId: true }))
       return res
         .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos." });
+        .json(validateFields({ ...req.body, id, checkId: true }));
 
     const devExists = await getDesenvolvedorByIdService(Number(id));
 

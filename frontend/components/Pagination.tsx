@@ -9,7 +9,7 @@ export function Pagination({
   setPage,
 }: {
   isLoading: boolean;
-  paginationData: IMeta;
+  paginationData?: IMeta;
   setPage: (page: number) => void;
 }) {
   const { current_page, last_page } = paginationData || {};

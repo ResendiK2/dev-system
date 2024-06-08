@@ -1,7 +1,7 @@
 import { INivelBody } from "@/utils/types";
 import axios from "axios";
 
-const API_URL = "http://localhost:3333/api/niveis";
+const API_URL = `${process.env.API_URL || "http://localhost:3333"}/api/niveis`;
 
 export const getLevels = async ({
   page = 1,

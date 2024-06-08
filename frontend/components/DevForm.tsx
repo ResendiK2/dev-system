@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { z } from "zod";
+import { useRef, useState } from "react";
+
+import { Edit, PlusCircle } from "lucide-react";
+import { format } from "date-fns";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit, PlusCircle } from "lucide-react";
-import { Input } from "./ui/input";
+
 import { Button } from "./ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import {
   Dialog,
   DialogClose,
@@ -17,12 +19,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import {
-  ICustomError,
-  IDesenvolvedor,
-  IGetNiveis,
-  INivel,
-} from "@/utils/types";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import { Input } from "./ui/input";
 import {
   Select,
   SelectContent,
@@ -30,12 +28,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Textarea } from "./ui/textarea";
 import { SelectWithSearch } from "./SelectWithSearch";
-import { getLevels } from "@/api/niveis";
-import { createDev, updateDev } from "@/api/desenvolvedores";
-import { format } from "date-fns";
 import { Spinner } from "./Spinner";
+import { Textarea } from "./ui/textarea";
+
+import { createDev, updateDev } from "@/api/desenvolvedores";
+
+import {
+  IDesenvolvedor,
+  IDesenvolvedorBody,
+  IGetDesenvolvedores,
+} from "@/utils/types";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
@@ -66,10 +69,80 @@ const formSchema = z.object({
 
 export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [niveis, setNiveis] = useState<INivel[]>([]);
-  const [query, setQuery] = useState("");
 
   const dialogRef = useRef<HTMLButtonElement>(null);
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync } = useMutation({
+    mutationFn: desenvolvedor?.id ? updateDev : createDev,
+    onSuccess: (data) => {
+      let cached = queryClient.getQueryData<IGetDesenvolvedores>([
+        "devs",
+        1,
+        "",
+      ]);
+
+      if (!cached) return;
+
+      if (!desenvolvedor?.id) {
+        if (cached.meta.total < cached.meta.per_page) {
+          const newData: IDesenvolvedor[] = cached.data;
+          newData.push(data);
+
+          queryClient.setQueryData<IGetDesenvolvedores>(["devs", 1, ""], {
+            ...cached,
+            data: newData,
+          });
+
+          return;
+        }
+
+        cached = queryClient.getQueryData<IGetDesenvolvedores>([
+          "devs",
+          cached.meta.last_page,
+          "",
+        ]);
+
+        if (!cached) return;
+
+        if (cached.meta.total == cached.meta.per_page) return;
+
+        const newData: IDesenvolvedor[] = cached.data;
+
+        newData.push(data);
+
+        queryClient.setQueryData<IGetDesenvolvedores>(
+          ["devs", cached.meta.last_page, ""],
+          {
+            ...cached,
+            data: newData,
+          }
+        );
+
+        return;
+      }
+
+      Array.from({ length: cached.meta.last_page }).forEach((_, index) => {
+        cached = queryClient.getQueryData<IGetDesenvolvedores>([
+          "devs",
+          index + 1,
+          "",
+        ]);
+
+        if (!cached) return;
+
+        const newData = cached.data.map((dev) =>
+          dev.id === data.id ? data : dev
+        );
+
+        queryClient.setQueryData<IGetDesenvolvedores>(["devs", index + 1, ""], {
+          ...cached,
+          data: newData,
+        });
+      });
+    },
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,21 +159,20 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const { id, nome, sexo, data_nascimento, hobby, nivel_id } =
-        values as IDesenvolvedor;
+        values as IDesenvolvedorBody;
 
       setIsLoading(true);
 
-      const data: IDesenvolvedor = {
+      const data: IDesenvolvedorBody = {
         id,
         nome,
         sexo,
-        data_nascimento: new Date(data_nascimento),
+        data_nascimento: new Date(`${data_nascimento}T12:00:00`),
         hobby,
         nivel_id,
       };
 
-      if (id) await updateDev(data);
-      else await createDev(data);
+      await mutateAsync(data);
 
       toast.success(
         id
@@ -126,20 +198,6 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
       ),
     });
   };
-
-  useEffect(() => {
-    getLevels({ query })
-      .then((data: IGetNiveis) => {
-        setNiveis(data.data);
-      })
-      .catch((error) => {
-        const customError = error as ICustomError;
-
-        toast.error(
-          customError?.response?.data?.error || "Erro ao buscar níveis"
-        );
-      });
-  }, [query]);
 
   return (
     <Dialog>
@@ -242,14 +300,10 @@ export function DevForm({ desenvolvedor }: { desenvolvedor?: IDesenvolvedor }) {
                   <div>
                     <FormControl>
                       <SelectWithSearch
-                        items={niveis.map((nivel) => ({
-                          label: nivel.nivel,
-                          value: String(nivel.id),
-                        }))}
-                        value={String(field.value)}
-                        onValueChange={(value) => field.onChange(Number(value))}
                         key='nivel_id'
                         disabled={isLoading}
+                        value={String(field.value)}
+                        onValueChange={(value) => field.onChange(Number(value))}
                       />
                     </FormControl>
                   </div>

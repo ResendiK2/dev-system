@@ -38,9 +38,14 @@ import { IDesenvolvedor, IDesenvolvedorBody } from "@/utils/types";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
-  nome: z.string().min(3, {
-    message: "Nome deve ter no mínimo 3 caracteres.",
-  }),
+  nome: z
+    .string()
+    .min(3, {
+      message: "Nome deve ter no mínimo 3 caracteres.",
+    })
+    .max(100, {
+      message: "Nome deve ter no máximo 100 caracteres.",
+    }),
   sexo: z.string().min(1, {
     message: "Sexo deve ser preenchido.",
   }),
@@ -55,9 +60,14 @@ const formSchema = z.object({
     .refine((value) => new Date(value) <= new Date(), {
       message: "Data de nascimento deve ser menor que a data atual.",
     }),
-  hobby: z.string().min(3, {
-    message: "Hobby deve ter no mínimo 3 caracteres.",
-  }),
+  hobby: z
+    .string()
+    .min(3, {
+      message: "Hobby deve ter no mínimo 3 caracteres.",
+    })
+    .max(300, {
+      message: "Hobby deve ter no máximo 300 caracteres.",
+    }),
   nivel_id: z.number().min(1, {
     message: "Nível deve ser preenchido.",
   }),

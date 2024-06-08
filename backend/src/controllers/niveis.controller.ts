@@ -100,17 +100,17 @@ export const deleteNivel = async (req: Request, res: Response) => {
     if (!id)
       return res.status(400).json({ error: "Id do nível é obrigatório." });
 
+    const alreadyExists = await getNivelByIdService(Number(id));
+
+    if (!alreadyExists)
+      return res.status(404).json({ error: "Nível não encontrado." });
+
     const desenvolvedores = await getDesenvolvedorByNivelService(Number(id));
 
     if (desenvolvedores?.length)
       return res
         .status(409)
         .json({ error: "Este nível possui desenvolvedores associados." });
-
-    const alreadyExists = await getNivelByIdService(Number(id));
-
-    if (!alreadyExists)
-      return res.status(404).json({ error: "Nível não encontrado." });
 
     const deletedNivel = await deleteNivelService(Number(id));
 

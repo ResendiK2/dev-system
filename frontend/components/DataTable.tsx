@@ -1,21 +1,18 @@
 "use client";
 
 import * as React from "react";
+
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { TextSelect } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Spinner } from "./Spinner";
 import {
   Table,
   TableBody,
@@ -24,8 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Spinner } from "./Spinner";
-import { TextSelect } from "lucide-react";
 
 export function TableComponent({
   columns,
@@ -37,45 +32,18 @@ export function TableComponent({
   isLoading?: boolean;
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
+    state: { sorting },
   });
 
   return (
     <div className='w-full'>
-      <div className='flex justify-end items-center  ml-1 py-4'>
-        <Input
-          placeholder='Buscar...'
-          // value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
-          // onChange={(event) =>
-          //   table.getColumn("nome")?.setFilterValue(event.target.value)
-          // }
-          className='max-w-sm'
-        />
-      </div>
-
       <div className='rounded-md border'>
         <Table>
           <TableHeader>
@@ -136,27 +104,6 @@ export function TableComponent({
           )}
         </div>
       ) : null}
-
-      <div className='flex items-center justify-end ml-2 space-x-2 py-4'>
-        <div className='space-x-2'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Pagina anterior
-          </Button>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Proxima pagina
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

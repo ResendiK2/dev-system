@@ -13,7 +13,7 @@ import { getDesenvolvedorByNivelService } from "../services/desenvolvedores.serv
 
 export const getNiveis = async (req: Request, res: Response) => {
   try {
-    const { page = 1, query } = req.query || {};
+    const { page = 1, query = "" } = req.query || {};
 
     const paginaAtual = parseInt(page as string) || 1;
     const porPagina = 10;
@@ -48,8 +48,8 @@ export const createNivel = async (req: Request, res: Response) => {
   try {
     const { nivel }: { nivel: string } = req.body;
 
-    if (!nivel)
-      return res.status(400).json({ error: "O campo 'nivel' é obrigatório." });
+    if (!nivel || nivel.length < 3 || nivel.length > 100)
+      return res.status(400).json({ error: "Nivel inválido." });
 
     const alreadyExists = await getNivelByNameService(nivel);
 
@@ -69,16 +69,13 @@ export const createNivel = async (req: Request, res: Response) => {
 export const updateNivel = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const {
-      nivel,
-    }: {
-      nivel: string;
-    } = req.body;
+    const { nivel } = req.body;
 
-    if (!nivel || !id)
-      return res
-        .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos." });
+    if (!id || Number.isNaN(Number(id)))
+      return res.status(400).json({ error: "Id inválido." });
+
+    if (!nivel || nivel.length < 3 || nivel.length > 100)
+      return res.status(400).json({ error: "Nível inválido." });
 
     const alreadyExists = await getNivelByIdService(Number(id));
 
@@ -97,8 +94,8 @@ export const deleteNivel = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    if (!id)
-      return res.status(400).json({ error: "Id do nível é obrigatório." });
+    if (!id || Number.isNaN(Number(id)))
+      return res.status(400).json({ error: "Id inválido." });
 
     const alreadyExists = await getNivelByIdService(Number(id));
 
@@ -110,12 +107,12 @@ export const deleteNivel = async (req: Request, res: Response) => {
     if (desenvolvedores?.length)
       return res
         .status(409)
-        .json({ error: "Este nível possui desenvolvedores associados." });
+        .json({ error: "Existem desenvolvedores com este nível." });
 
     const deletedNivel = await deleteNivelService(Number(id));
 
     res.status(204).send(deletedNivel);
   } catch (error) {
-    return res.status(400).json({ error: "Erro ao remover nível." });
+    return res.status(500).json({ error: "Erro ao remover nível." });
   }
 };

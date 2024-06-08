@@ -28,9 +28,14 @@ import { ICustomError, INivel, INivelBody } from "@/utils/types";
 
 const formSchema = z.object({
   id: z.number().optional().nullable(),
-  nivel: z.string().min(3, {
-    message: "Nivel deve ter no mínimo 3 caracteres.",
-  }),
+  nivel: z
+    .string()
+    .min(3, {
+      message: "Nivel deve ter no mínimo 3 caracteres.",
+    })
+    .max(100, {
+      message: "Nivel deve ter no máximo 100 caracteres.",
+    }),
 });
 
 export function LevelForm({ nivel }: { nivel?: INivel }) {

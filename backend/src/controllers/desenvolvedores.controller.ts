@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
+import moment from "moment";
+
 import {
   getDesenvolvedoresService,
   createDesenvolvedorService,
   updateDesenvolvedorService,
   deleteDesenvolvedorService,
 } from "../services/desenvolvedores.service";
+
 import { IDesenvolvedor } from "../types/types";
-import moment from "moment";
 
 export const getDesenvolvedores = async (req: Request, res: Response) => {
   try {
@@ -69,14 +71,8 @@ export const updateDesenvolvedor = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const {
-      nome,
-      hobby,
-      nivel_id,
-      sexo,
-      data_nascimento,
-      idade,
-    }: IDesenvolvedor = req.body;
+    const { nome, hobby, nivel_id, sexo, data_nascimento }: IDesenvolvedor =
+      req.body;
 
     const updatedDesenvolvedor = await updateDesenvolvedorService({
       id: Number(id),
@@ -85,7 +81,6 @@ export const updateDesenvolvedor = async (req: Request, res: Response) => {
       nivel_id,
       sexo,
       data_nascimento: new Date(data_nascimento),
-      idade,
     });
     res.status(200).json(updatedDesenvolvedor);
   } catch (error) {
@@ -100,9 +95,9 @@ export const deleteDesenvolvedor = async (req: Request, res: Response) => {
     if (!id)
       return res.status(400).json({ error: "Erro ao remover desenvolvedor." });
 
-    await deleteDesenvolvedorService(Number(id));
+    const deletedDev = await deleteDesenvolvedorService(Number(id));
 
-    res.status(204).send();
+    res.status(204).send(deletedDev);
   } catch (error) {
     res.status(500).json({ error: "Erro ao remover desenvolvedor." });
   }

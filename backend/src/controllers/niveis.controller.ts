@@ -15,7 +15,7 @@ export const getNiveis = async (req: Request, res: Response) => {
     const { page = 1, query } = req.query || {};
 
     const paginaAtual = parseInt(page as string) || 1;
-    const porPagina = 5;
+    const porPagina = 10;
 
     const skip = (paginaAtual - 1) * porPagina;
     const take = porPagina;

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { debounce } from "lodash";
 
 import {
@@ -24,19 +23,24 @@ import { useDevs } from "@/hooks/useDevs";
 export default function Desenvolvedores() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     setQuery("");
+    setInputValue("");
   }, []);
 
   const { data, isLoading } = useDevs({ page, query });
 
-  const handleSearchChange = debounce(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(e.target.value);
-    },
-    500
-  );
+  const debouncedSetQuery = debounce((value) => {
+    setQuery(value);
+  }, 500);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    debouncedSetQuery(value);
+  };
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
@@ -62,7 +66,7 @@ export default function Desenvolvedores() {
           <Input
             placeholder='Buscar...'
             className='max-w-sm'
-            value={query}
+            value={inputValue}
             onChange={handleSearchChange}
           />
         </div>

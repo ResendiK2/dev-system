@@ -6,6 +6,7 @@ import {
   createDesenvolvedorService,
   updateDesenvolvedorService,
   deleteDesenvolvedorService,
+  getDesenvolvedorByIdService,
 } from "../services/desenvolvedores.service";
 
 import { IDesenvolvedor } from "../types/types";
@@ -51,7 +52,9 @@ export const createDesenvolvedor = async (req: Request, res: Response) => {
       req.body;
 
     if (!nivel_id || !nome || !sexo || !data_nascimento || !hobby)
-      return res.status(400).json({ error: "Dados inválidos." });
+      return res
+        .status(400)
+        .json({ error: "Campos obrigatórios não preenchidos." });
 
     const newDesenvolvedor = await createDesenvolvedorService({
       nivel_id,
@@ -74,6 +77,16 @@ export const updateDesenvolvedor = async (req: Request, res: Response) => {
     const { nome, hobby, nivel_id, sexo, data_nascimento }: IDesenvolvedor =
       req.body;
 
+    if (!id || !nome || !hobby || !nivel_id || !sexo || !data_nascimento)
+      return res
+        .status(400)
+        .json({ error: "Campos obrigatórios não preenchidos." });
+
+    const devExists = await getDesenvolvedorByIdService(Number(id));
+
+    if (!devExists)
+      return res.status(404).json({ error: "Desenvolvedor não encontrado." });
+
     const updatedDesenvolvedor = await updateDesenvolvedorService({
       id: Number(id),
       nome,
@@ -82,6 +95,7 @@ export const updateDesenvolvedor = async (req: Request, res: Response) => {
       sexo,
       data_nascimento: new Date(data_nascimento),
     });
+
     res.status(200).json(updatedDesenvolvedor);
   } catch (error) {
     res.status(400).json({ error: "Erro ao atualizar desenvolvedor." });
@@ -93,7 +107,14 @@ export const deleteDesenvolvedor = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id)
-      return res.status(400).json({ error: "Erro ao remover desenvolvedor." });
+      return res
+        .status(400)
+        .json({ error: "Id do desenvolvedor é obrigatório." });
+
+    const devExists = await getDesenvolvedorByIdService(Number(id));
+
+    if (!devExists)
+      return res.status(404).json({ error: "Desenvolvedor não encontrado." });
 
     const deletedDev = await deleteDesenvolvedorService(Number(id));
 

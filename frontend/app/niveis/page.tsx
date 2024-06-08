@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { debounce } from "lodash";
 
 import { Button } from "../../components/ui/button";
@@ -25,19 +24,24 @@ import { useLevels } from "@/hooks/useLevels";
 export default function Niveis() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     setQuery("");
+    setInputValue("");
   }, []);
 
   const { data, isLoading } = useLevels({ page, query });
 
-  const handleSearchChange = debounce(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(e.target.value);
-    },
-    500
-  );
+  const debouncedSetQuery = debounce((value) => {
+    setQuery(value);
+  }, 500);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    debouncedSetQuery(value);
+  };
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
@@ -64,11 +68,11 @@ export default function Niveis() {
       </div>
 
       <div className='border rounded-lg p-2'>
-        <div className='flex justify-end items-center  ml-1 py-4'>
+        <div className='flex justify-end items-center ml-1 py-4'>
           <Input
             placeholder='Buscar...'
             className='max-w-sm'
-            value={query}
+            value={inputValue}
             onChange={handleSearchChange}
           />
         </div>

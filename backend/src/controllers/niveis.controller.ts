@@ -94,9 +94,9 @@ export const deleteNivel = async (req: Request, res: Response) => {
         .status(400)
         .json({ error: "Este nível possui desenvolvedores associados." });
 
-    await deleteNivelService(Number(id));
+    const deletedNivel = await deleteNivelService(Number(id));
 
-    res.status(204).send();
+    res.status(204).send(deletedNivel);
   } catch (error) {
     return res.status(400).json({ error: "Erro ao remover nível." });
   }

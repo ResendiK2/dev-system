@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 
 import { debounce } from "lodash";
-import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 
 import {
   Breadcrumb,
@@ -20,9 +18,8 @@ import { Pagination } from "@/components/Pagination";
 import { TableComponent } from "@/components/DataTable";
 import { Toaster } from "../components/ui/sonner";
 
-import { getDevs } from "@/api/desenvolvedores";
-
-import { ICustomError, IDesenvolvedor } from "@/utils/types";
+import { IDesenvolvedor } from "@/utils/types";
+import { useDevs } from "@/hooks/useDevs";
 
 export default function Desenvolvedores() {
   const [page, setPage] = useState(1);
@@ -32,22 +29,7 @@ export default function Desenvolvedores() {
     setQuery("");
   }, []);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["devs", page, query],
-    queryFn: () => getDevs({ page, query }),
-    staleTime: 300000,
-  });
-
-  useEffect(() => {
-    if (error) {
-      const customError = error as ICustomError;
-      toast.error(
-        customError?.response?.data?.error ||
-          customError?.message ||
-          "Erro ao buscar desenvolvedores"
-      );
-    }
-  }, [error]);
+  const { data, isLoading } = useDevs({ page, query });
 
   const handleSearchChange = debounce(
     (e: React.ChangeEvent<HTMLInputElement>) => {

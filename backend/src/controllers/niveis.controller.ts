@@ -27,11 +27,6 @@ export const getNiveis = async (req: Request, res: Response) => {
       take,
     });
 
-    console.log({
-      niveis,
-      total,
-    });
-
     if (!niveis.length)
       return res.status(404).json({ error: "Nenhum nível encontrado." });
 
@@ -45,7 +40,6 @@ export const getNiveis = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: "Erro ao buscar níveis." });
   }
 };

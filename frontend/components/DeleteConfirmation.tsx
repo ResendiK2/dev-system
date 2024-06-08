@@ -19,12 +19,75 @@ import { Spinner } from "./Spinner";
 import { deleteDev } from "@/api/desenvolvedores";
 import { deleteLevel } from "@/api/niveis";
 
-import { ICustomError } from "@/utils/types";
+import { ICustomError, IMeta } from "@/utils/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function DeleteConfirmation({ id, type }: { id: number; type: string }) {
+interface ICachedData {
+  data: any[];
+  meta: IMeta;
+}
+
+interface IItem {
+  id: number;
+}
+
+export function DeleteConfirmation({
+  id,
+  type,
+}: {
+  id: number;
+  type: "desenvolvedor" | "nivel";
+}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const dialogRef = useRef<HTMLButtonElement>(null);
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync } = useMutation({
+    mutationFn: type === "desenvolvedor" ? deleteDev : deleteLevel,
+    onSuccess: () => {
+      let cached = queryClient.getQueryData<ICachedData>([
+        type === "desenvolvedor" ? "devs" : "niveis",
+        1,
+        "",
+      ]);
+
+      if (!cached) return;
+
+      let index = cached.data.findIndex((item: IItem) => item.id === id);
+
+      if (index === -1) {
+        Array.from({ length: cached.meta.last_page }).forEach((_, index) => {
+          cached = queryClient.getQueryData([
+            type === "desenvolvedor" ? "devs" : "niveis",
+            index + 1,
+            "",
+          ]);
+
+          if (!cached) return;
+
+          const newData = cached.data.filter((item: IItem) => item.id !== id);
+
+          queryClient.setQueryData(
+            [type === "desenvolvedor" ? "devs" : "niveis", index + 1, ""],
+            {
+              ...cached,
+              data: newData,
+            }
+          );
+        });
+      } else {
+        queryClient.setQueryData(
+          [type === "desenvolvedor" ? "devs" : "niveis", 1, ""],
+          {
+            ...cached,
+            data: cached.data.filter((item: IItem) => item.id !== id),
+          }
+        );
+      }
+    },
+  });
 
   const handleDelete = async () => {
     setIsLoading(true);
@@ -32,16 +95,7 @@ export function DeleteConfirmation({ id, type }: { id: number; type: string }) {
     try {
       if (!id) throw new Error("Dados inválidos.");
 
-      switch (type) {
-        case "desenvolvedor":
-          await deleteDev(id);
-          break;
-        case "nivel":
-          await deleteLevel(id);
-          break;
-        default:
-          throw new Error("Tipo inválido.");
-      }
+      await mutateAsync(id);
 
       toast.success(`Sucesso ao excluir ${type}.`);
     } catch (error) {

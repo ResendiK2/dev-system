@@ -1,4 +1,4 @@
-import { INivel } from "@/utils/types";
+import { INivelBody } from "@/utils/types";
 import axios from "axios";
 
 const API_URL = "http://localhost:3333/api/niveis";
@@ -20,13 +20,13 @@ export const getLevels = async ({
   return response?.data || [];
 };
 
-export const createLevel = async (level: INivel) => {
+export const createLevel = async (level: INivelBody) => {
   const response = await axios.post(API_URL, level);
 
   return response.data;
 };
 
-export const updateLevel = async (nivel: INivel) => {
+export const updateLevel = async (nivel: INivelBody) => {
   const response = await axios.put(`${API_URL}/${nivel.id}`, nivel);
 
   return response.data;

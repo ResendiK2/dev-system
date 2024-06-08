@@ -2,7 +2,9 @@
 import { IDesenvolvedorBody } from "@/utils/types";
 import axios from "axios";
 
-const API_URL = "http://localhost:3333/api/desenvolvedores";
+const API_URL = `${
+  process.env.API_URL || "http://localhost:3333"
+}/api/desenvolvedores`;
 
 export const getDevs = async ({
   page,

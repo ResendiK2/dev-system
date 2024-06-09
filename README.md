@@ -52,11 +52,16 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
     http://localhost:3333/api-docs
     ```
 
-8. Para rodar os testes de frontend, execute o comando
-
+8. Para rodar os testes
+    - Testes do backend
     ```bash
-    npm run test
+        cd backend && npm run test
     ```
+
+    - Testes do frontend
+    ```bash
+        cd frontend && npm run test
+    ```	
 
 ## Tecnologias Utilizadas 🛠
     -️ Backend: Node.js, Express.js, Prisma ORM, PostgreSQL

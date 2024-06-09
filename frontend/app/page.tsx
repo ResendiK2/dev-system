@@ -95,7 +95,7 @@ export default function Desenvolvedores() {
         />
       </div>
 
-      <Toaster position='top-right' />
+      <Toaster richColors position='top-right' />
     </div>
   );
 }

@@ -63,11 +63,11 @@ export const getDesenvolvedores = async (req: Request, res: Response) => {
     });
 
     if (!desenvolvedores.length) {
-      const hasQuery = query && query.length > 0;
+      const hasNoQuery = !query || query.length === 0;
 
       return res
-        .status(hasQuery ? 404 : 204)
-        .json(hasQuery ? { error: "Nenhum desenvolvedor encontrado." } : []);
+        .status(hasNoQuery ? 204 : 404)
+        .json(hasNoQuery ? [] : { error: "Nenhum desenvolvedor encontrado." });
     }
 
     res.status(200).json({

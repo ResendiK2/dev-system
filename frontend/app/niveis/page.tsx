@@ -90,7 +90,7 @@ export default function Niveis() {
         />
       </div>
 
-      <Toaster richColors position='top-right' />
+      <Toaster richColors closeButton position='top-right' />
     </div>
   );
 }

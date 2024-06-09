@@ -4,7 +4,7 @@ import { IMeta } from "@/utils/types";
 import { Button } from "../components/ui/button";
 
 export function Pagination({
-  isLoading,
+  isLoading = false,
   paginationData,
   setPage,
 }: {
@@ -12,9 +12,7 @@ export function Pagination({
   paginationData?: IMeta;
   setPage: (page: number) => void;
 }) {
-  const { current_page, last_page } = paginationData || {};
-
-  if (!current_page || !last_page) return null;
+  const { current_page = 1, last_page = 1 } = paginationData || {};
 
   return (
     <div className='flex justify-between items-center space-x-2 py-4'>

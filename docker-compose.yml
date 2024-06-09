@@ -26,7 +26,7 @@ services:
       DATABASE_URL: "postgresql://docker:docker@db:5432/dev-system-db"
       CHOKIDAR_USEPOLLING: true
     command: >
-      sh -c "npx prisma migrate dev --name init && npm run dev"
+      sh -c "npm run dev"
 
   frontend:
     build:

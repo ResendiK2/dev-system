@@ -47,7 +47,9 @@ export default function Desenvolvedores() {
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
       <div className='flex justify-between'>
-        <h1 className='text-3xl font-bold text-blue-600'>Dev System</h1>
+        <h1 data-testid='title' className='text-3xl font-bold text-blue-600'>
+          Dev System
+        </h1>
 
         <a href={DOCS_URL} target='_blank'>
           <Button variant='outline'>Link para documentação</Button>

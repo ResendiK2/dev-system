@@ -9,7 +9,8 @@
     "dev": "ts-node-dev --respawn --poll src/index.ts",
     "prisma": "prisma",
     "studio": "prisma studio",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "",

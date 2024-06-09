@@ -45,7 +45,7 @@ export default function Niveis() {
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
-      <h1 className='text-3xl font-bold'>Niveis</h1>
+      <h1 className='text-3xl font-bold'>Níveis</h1>
 
       <Breadcrumb>
         <BreadcrumbList>
@@ -54,7 +54,7 @@ export default function Niveis() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Niveis</BreadcrumbPage>
+            <BreadcrumbPage>Níveis</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

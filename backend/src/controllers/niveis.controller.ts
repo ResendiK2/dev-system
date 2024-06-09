@@ -27,8 +27,12 @@ export const getNiveis = async (req: Request, res: Response) => {
       take,
     });
 
-    if (!niveis.length)
-      return res.status(404).json({ error: "Nenhum nível encontrado." });
+    if (!niveis.length) {
+      const hasQuery = query && query.length > 0;
+      return res
+        .status(hasQuery ? 404 : 204)
+        .json(hasQuery ? { error: "Nenhum nível encontrado." } : []);
+    }
 
     res.status(200).json({
       data: niveis,

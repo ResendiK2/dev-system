@@ -30,9 +30,19 @@ export const getNiveis = async (req: Request, res: Response) => {
     if (!niveis.length) {
       const hasNoQuery = !query || query.length === 0;
 
-      return res
-        .status(hasNoQuery ? 204 : 404)
-        .json(hasNoQuery ? [] : { error: "Nenhum nível encontrado." });
+      return res.status(hasNoQuery ? 204 : 404).json(
+        hasNoQuery
+          ? {
+              data: niveis,
+              meta: {
+                total: 0,
+                per_page: porPagina,
+                current_page: paginaAtual,
+                last_page: Math.max(Math.ceil(total || 0 / porPagina), 1),
+              },
+            }
+          : { error: "Nenhum nível encontrado." }
+      );
     }
 
     res.status(200).json({
@@ -41,7 +51,7 @@ export const getNiveis = async (req: Request, res: Response) => {
         total,
         per_page: porPagina,
         current_page: paginaAtual,
-        last_page: Math.ceil(total / porPagina),
+        last_page: Math.max(Math.ceil(total / porPagina), 1),
       },
     });
   } catch (error) {

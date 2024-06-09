@@ -50,19 +50,35 @@ describe("Niveis Controller test", () => {
       });
     });
 
-    it("should return error 404 if no levels are found", async () => {
-      req = {
-        body: {},
-        params: {},
-      };
-
+    it("should return error 404 if no levels are found in search query", async () => {
       (getNiveisService as jest.Mock).mockResolvedValue({ niveis: [] });
+
+      req.query = { page: "1", query: "Level" };
 
       await getNiveis(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({
         error: "Nenhum nível encontrado.",
+      });
+    });
+
+    it("should return error 204 if no levels are found", async () => {
+      (getNiveisService as jest.Mock).mockResolvedValue({ niveis: [] });
+
+      req.query = { page: "1" };
+
+      await getNiveis(req as Request, res as Response);
+
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.json).toHaveBeenCalledWith({
+        data: [],
+        meta: {
+          total: 0,
+          per_page: 10,
+          current_page: 1,
+          last_page: 1,
+        },
       });
     });
 

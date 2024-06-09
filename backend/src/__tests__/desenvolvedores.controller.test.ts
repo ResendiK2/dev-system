@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, query } from "express";
 import {
   getDesenvolvedores,
   createDesenvolvedor,
@@ -42,19 +42,41 @@ describe("Desenvolvedores Controller test", () => {
       });
     });
 
-    it("should return error 404 if no developers are found", async () => {
+    it("should return error 404 if no developers are found in search query", async () => {
       (getDesenvolvedoresService as jest.Mock).mockResolvedValue({
         desenvolvedores: [],
         total: 0,
       });
 
-      req.query = { page: "1" };
+      req.query = { page: "1", query: "Dev" };
 
       await getDesenvolvedores(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({
         error: "Nenhum desenvolvedor encontrado.",
+      });
+    });
+
+    it("should return 204 if no developers are found", async () => {
+      (getDesenvolvedoresService as jest.Mock).mockResolvedValue({
+        desenvolvedores: [],
+        total: 0,
+      });
+
+      req.query = { page: "1", query: "" };
+
+      await getDesenvolvedores(req as Request, res as Response);
+
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.json).toHaveBeenCalledWith({
+        data: [],
+        meta: {
+          total: 0,
+          per_page: 10,
+          current_page: 1,
+          last_page: 1,
+        },
       });
     });
 

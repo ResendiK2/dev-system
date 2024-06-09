@@ -65,7 +65,21 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Nivel"
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "nivel": {
+                            "type": "string",
+                            "example": "Junior"
+                          },
+                          "n_desenvolvedores": {
+                            "type": "integer",
+                            "example": 1
+                          }
+                        }
                       }
                     },
                     "meta": {
@@ -417,6 +431,27 @@
       "get": {
         "tags": ["Desenvolvedores"],
         "summary": "Lista todos os desenvolvedores",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Filtro por nível",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "default": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de desenvolvedores",
@@ -428,7 +463,47 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Desenvolvedor"
+                        "type": "object",
+                        "properties": {
+                          "nome": {
+                            "type": "string",
+                            "example": "Gabriel Resende"
+                          },
+                          "nivel_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "sexo": {
+                            "type": "string",
+                            "example": "M"
+                          },
+                          "data_nascimento": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2001-08-16"
+                          },
+                          "idade": {
+                            "type": "integer",
+                            "example": 22
+                          },
+                          "hobby": {
+                            "type": "string",
+                            "example": "Programar"
+                          },
+                          "nivel": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "nivel": {
+                                "type": "string",
+                                "example": "Pleno"
+                              }
+                            }
+                          }
+                        }
                       }
                     },
                     "meta": {
@@ -584,6 +659,17 @@
       "put": {
         "tags": ["Desenvolvedores"],
         "summary": "Atualiza um desenvolvedor existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do nível",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Desenvolvedor atualizado",
@@ -647,6 +733,17 @@
       },
       "delete": {
         "tags": ["Desenvolvedores"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do nível",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "summary": "Remove um desenvolvedor existente",
         "responses": {
           "204": {
@@ -729,24 +826,26 @@
       "Desenvolvedor": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer"
-          },
           "nome": {
-            "type": "string"
+            "type": "string",
+            "example": "Gabriel Resende"
           },
           "nivel_id": {
-            "type": "integer"
+            "type": "integer",
+            "example": 1
           },
           "sexo": {
-            "type": "string"
+            "type": "string",
+            "example": "M"
           },
           "data_nascimento": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "example": "2001-08-16"
           },
           "hobby": {
-            "type": "string"
+            "type": "string",
+            "example": "Programar"
           }
         }
       }

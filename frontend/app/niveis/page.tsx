@@ -45,9 +45,11 @@ export default function Niveis() {
 
   return (
     <div className='p-6 max-w-full mx-auto space-y-4'>
-      <h1 className='text-3xl font-bold'>Níveis</h1>
+      <h1 data-testid='title' className='text-3xl font-bold'>
+        Níveis
+      </h1>
 
-      <Breadcrumb>
+      <Breadcrumb data-testid='breadcrumbs'>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href='/'>Desenvolvedores</BreadcrumbLink>

@@ -65,9 +65,19 @@ export const getDesenvolvedores = async (req: Request, res: Response) => {
     if (!desenvolvedores.length) {
       const hasNoQuery = !query || query.length === 0;
 
-      return res
-        .status(hasNoQuery ? 204 : 404)
-        .json(hasNoQuery ? [] : { error: "Nenhum desenvolvedor encontrado." });
+      return res.status(hasNoQuery ? 204 : 404).json(
+        hasNoQuery
+          ? {
+              data: desenvolvedores,
+              meta: {
+                total: 0,
+                per_page: porPagina,
+                current_page: paginaAtual,
+                last_page: Math.max(Math.ceil(total || 0 / porPagina), 1),
+              },
+            }
+          : { error: "Nenhum desenvolvedor encontrado." }
+      );
     }
 
     res.status(200).json({
@@ -76,7 +86,7 @@ export const getDesenvolvedores = async (req: Request, res: Response) => {
         total,
         per_page: porPagina,
         current_page: paginaAtual,
-        last_page: Math.ceil(total / porPagina),
+        last_page: Math.max(Math.ceil(total / porPagina), 1),
       },
     });
   } catch (error) {

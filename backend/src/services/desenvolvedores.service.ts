@@ -31,7 +31,7 @@ export const getDesenvolvedoresService = async ({
     dev.idade = hoje.diff(dataNascimento, "years");
   });
 
-  const total = await prismaClient.desenvolvedor.count({ where });
+  const total = (await prismaClient.desenvolvedor.count({ where })) || 0;
 
   return { desenvolvedores, total };
 };

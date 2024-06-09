@@ -28,10 +28,11 @@ export const getNiveis = async (req: Request, res: Response) => {
     });
 
     if (!niveis.length) {
-      const hasQuery = query && query.length > 0;
+      const hasNoQuery = !query || query.length === 0;
+
       return res
-        .status(hasQuery ? 404 : 204)
-        .json(hasQuery ? { error: "Nenhum nível encontrado." } : []);
+        .status(hasNoQuery ? 204 : 404)
+        .json(hasNoQuery ? [] : { error: "Nenhum nível encontrado." });
     }
 
     res.status(200).json({

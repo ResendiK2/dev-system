@@ -28,7 +28,7 @@ export const getNiveisService = async ({
     delete nivel.Desenvolvedor;
   });
 
-  const total = await prismaClient.nivel.count({ where });
+  const total = (await prismaClient.nivel.count({ where })) || 0;
 
   return { niveis, total };
 };

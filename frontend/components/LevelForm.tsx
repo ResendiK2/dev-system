@@ -112,6 +112,7 @@ export function LevelForm({ nivel }: { nivel?: INivel }) {
             variant='secondary'
             ref={dialogRef}
             onClick={handleEdit(nivel)}
+            data-testid='edit-button'
           >
             <Edit className='w-4 h-4' />
           </Button>

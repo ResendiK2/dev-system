@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: bitnami/postgresql:latest
+    image: bitnami/postgresql:16.3.0
     environment:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=docker

@@ -35,10 +35,16 @@ export const Columns: ColumnDef<INivel>[] = [
   },
   {
     accessorKey: "n_desenvolvedores",
-    header: () => {
+    header: ({ column }) => {
       return (
-        <div className='flex justify-center items-center w-full'>
-          <Button variant='ghost'>Desenvolvedores vinculados</Button>
+        <div className='flex flex-1 justify-center items-center w-full'>
+          <Button
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Desenvolvedores vinculados
+            <ArrowUpDown className='ml-2 h-4 w-4' />
+          </Button>
         </div>
       );
     },

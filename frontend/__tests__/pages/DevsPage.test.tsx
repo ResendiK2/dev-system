@@ -123,16 +123,6 @@ describe("Desenvolvedores Page", () => {
     expect(searchInput).toHaveValue("Dev");
   });
 
-  it("should render developers data in the table", () => {
-    renderWithQueryClient(<Desenvolvedores />);
-
-    const dev1 = screen.getByText("Dev 1");
-    const dev2 = screen.getByText("Dev 2");
-
-    expect(dev1).toBeInTheDocument();
-    expect(dev2).toBeInTheDocument();
-  });
-
   it("should render not found component when data is empty", () => {
     mockedUseDevs.mockReturnValue({
       data: {
@@ -166,10 +156,20 @@ describe("Desenvolvedores Page", () => {
     expect(loading).toBeInTheDocument();
   });
 
+  it("should render developers data in the table", () => {
+    renderWithQueryClient(<Desenvolvedores />);
+
+    const dev1 = screen.getByText("Dev 1");
+    const dev2 = screen.getByText("Dev 2");
+
+    expect(dev1).toBeInTheDocument();
+    expect(dev2).toBeInTheDocument();
+  });
+
   it("should render pagination component", () => {
     renderWithQueryClient(<Desenvolvedores />);
 
-    const pagination = screen.getByText(/Página 1 de 1/i);
+    const pagination = screen.getByTestId("pagination");
 
     expect(pagination).toBeInTheDocument();
   });

@@ -62,6 +62,8 @@ export const Columns: ColumnDef<INivel>[] = [
 
       return (
         <div className='flex justify-center items-center space-x-2'>
+          <LevelForm nivel={nivel} />
+
           {nivel.n_desenvolvedores === 0 ? (
             <DeleteConfirmation id={nivel.id} type='nivel' />
           ) : (
@@ -83,8 +85,6 @@ export const Columns: ColumnDef<INivel>[] = [
               </Tooltip>
             </TooltipProvider>
           )}
-
-          <LevelForm nivel={nivel} />
         </div>
       );
     },

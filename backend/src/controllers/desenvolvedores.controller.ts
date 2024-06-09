@@ -62,10 +62,13 @@ export const getDesenvolvedores = async (req: Request, res: Response) => {
       take,
     });
 
-    if (!desenvolvedores.length)
+    if (!desenvolvedores.length) {
+      const hasQuery = query && query.length > 0;
+
       return res
-        .status(404)
-        .json({ error: "Nenhum desenvolvedor encontrado." });
+        .status(hasQuery ? 404 : 204)
+        .json(hasQuery ? { error: "Nenhum desenvolvedor encontrado." } : []);
+    }
 
     res.status(200).json({
       data: desenvolvedores,

@@ -73,7 +73,46 @@
                       "properties": {
                         "total": {
                           "type": "integer",
-                          "example": 10
+                          "example": 1
+                        },
+                        "per_page": {
+                          "type": "integer",
+                          "example": 10,
+                          "default": 10
+                        },
+                        "current_page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "last_page": {
+                          "type": "integer",
+                          "example": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Nenhum nível encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": [],
+                      "example": []
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "example": 0
                         },
                         "per_page": {
                           "type": "integer",
@@ -397,7 +436,7 @@
                       "properties": {
                         "total": {
                           "type": "integer",
-                          "example": 10
+                          "example": 1
                         },
                         "per_page": {
                           "type": "integer",
@@ -417,34 +456,73 @@
                   }
                 }
               }
-            },
-            "404": {
-              "description": "Nenhum desenvolvedor encontrado",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "error": {
-                        "type": "string",
-                        "example": "Nenhum desenvolvedor encontrado"
+            }
+          },
+          "204": {
+            "description": "Nenhum desenvolvedor encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": [],
+                      "example": []
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "example": 0
+                        },
+                        "per_page": {
+                          "type": "integer",
+                          "example": 10,
+                          "default": 10
+                        },
+                        "current_page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "last_page": {
+                          "type": "integer",
+                          "example": 1
+                        }
                       }
                     }
                   }
                 }
               }
-            },
-            "500": {
-              "description": "Erro interno do servidor",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "error": {
-                        "type": "string",
-                        "example": "Erro ao buscar desenvolvedores."
-                      }
+            }
+          },
+          "404": {
+            "description": "Nenhum desenvolvedor encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Nenhum desenvolvedor encontrado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Erro ao buscar desenvolvedores."
                     }
                   }
                 }

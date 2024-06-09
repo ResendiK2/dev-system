@@ -15,7 +15,10 @@ export function Pagination({
   const { current_page = 1, last_page = 1 } = paginationData || {};
 
   return (
-    <div className='flex justify-between items-center space-x-2 py-4'>
+    <div
+      data-testid='pagination'
+      className='flex justify-between items-center space-x-2 py-4'
+    >
       <Button
         variant='outline'
         size='sm'

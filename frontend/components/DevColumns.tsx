@@ -171,9 +171,9 @@ export const Columns: ColumnDef<IDesenvolvedor>[] = [
 
       return (
         <div className='flex justify-center items-center space-x-2'>
-          <DeleteConfirmation id={desenvolvedor.id} type='desenvolvedor' />
-
           <DevForm desenvolvedor={desenvolvedor} />
+
+          <DeleteConfirmation id={desenvolvedor.id} type='desenvolvedor' />
         </div>
       );
     },

@@ -28,9 +28,9 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
     ```bash
     cd dev-system
     ```
-3. Execute o comando
+3. Criar o arquivo .env na pasta backend seguindo o exemplo do arquivo .env.example
 
-4. Criar o arquivo .env na pasta backend seguindo o exemplo do arquivo .env.example
+4. Execute o comando
 
     ```bash
     docker-compose up

@@ -66,3 +66,8 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
   - [Dev System](https://dev-system-7qch.vercel.app/)
   - [Documentação - API](https://dev-system-api.onrender.com/api/docs/)
 
+## Pendências do Projeto ⚠️
+
+- **Finalização dos Testes Unitários e de Integração:** Atualmente, os testes unitários e de integração não foram totalmente implementados.
+
+- **Documentação dos Componentes Frontend com Storybook:** A documentação dos componentes frontend utilizando Storybook não foi realizada até o momento. 

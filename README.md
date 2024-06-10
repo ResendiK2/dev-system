@@ -63,12 +63,6 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
 
 ## Acesse o projeto em produção 🌐
 
-  - [Dev System](https://dev-system-7qch.vercel.app/){:target="_blank"}
-  - [Documentação - API](https://dev-system-api.onrender.com/api/docs/){:target="_blank"}
-
-<script>
-  document.querySelectorAll('a[target="_blank"]').forEach(function(link) {
-    link.target = "_blank";
-  });
-</script>
+  - [Dev System](https://dev-system-7qch.vercel.app/)
+  - [Documentação - API](https://dev-system-api.onrender.com/api/docs/)
 

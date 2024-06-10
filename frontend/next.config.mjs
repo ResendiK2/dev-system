@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+// next.config.mjs
 const nextConfig = {
   webpack: (config, { isServer, dev }) => {
     if (dev) {
@@ -7,8 +7,10 @@ const nextConfig = {
         aggregateTimeout: 300,
       };
     }
-
     return config;
+  },
+  env: {
+    API_URL: process.env.API_URL,
   },
 };
 

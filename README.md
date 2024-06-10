@@ -1,6 +1,6 @@
 # Projeto de Cadastro de Desenvolvedores 🚀
 
-O projeto consiste em uma aplicação para cadastro de desenvolvedores associados a diferentes níveis. A aplicação é composta por um backend que oferece uma API RESTful e um frontend que é uma SPA (Single Page Application) interligada à API.
+O projeto consiste em uma aplicação para cadastro de desenvolvedores associados a diferentes níveis. A aplicação é composta por um backend que oferece uma API RESTful e um frontend que é uma SPA (Single Page Application) interligada à API.📚
 
 ## Estrutura do Projeto 📂
 
@@ -33,7 +33,7 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
 4. Execute o comando
 
     ```bash
-    docker-compose up
+    docker-compose up --build
     ```
 5. Acesse a aplicação no navegador
 
@@ -46,13 +46,7 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
     docker-compose down
     ```
 
-7. Para acessar a documentação da API, acesse
-
-    ```bash
-    http://localhost:3333/api-docs
-    ```
-
-8. Para rodar os testes
+7. Para rodar os testes
     - Testes do backend
     ```bash
         cd backend && npm run test
@@ -66,3 +60,8 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
 ## Tecnologias Utilizadas 🛠
     -️ Backend: Node.js, Express.js, Prisma ORM, PostgreSQL
     - Frontend: Next.js, Tailwind CSS, Shadcn/ui
+
+## Acesse o projeto em produção 🌐
+    - [Dev System](https://dev-system-7qch.vercel.app/)
+    - [Documentação - API](https://dev-system-api.onrender.com/api/docs/)
+

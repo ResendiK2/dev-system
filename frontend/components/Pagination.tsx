@@ -17,7 +17,7 @@ export function Pagination({
   return (
     <div
       data-testid='pagination'
-      className='flex flex-col sm:flex-row space-y-3 sm:space-y-0 justify-between items-center space-x-2 py-4'
+      className='flex flex-col sm:flex-row space-y-3 sm:space-y-0 justify-center sm:justify-between items-center py-4'
     >
       <Button
         variant='outline'

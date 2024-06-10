@@ -13,7 +13,7 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
   🐳 docker-compose.yml
 ```
 
-## Requisitos
+## Requisitos 🤖
     - Docker e Docker Compose
 
 ## Como rodar o projeto 🚀

@@ -70,4 +70,4 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
 
 - **Finalização dos Testes Unitários e de Integração:** Atualmente, os testes unitários e de integração não foram totalmente implementados.
 
-- **Documentação dos Componentes Frontend com Storybook:** A documentação dos componentes frontend utilizando Storybook não foi realizada até o momento. 
+- **Documentação dos Componentes Frontend com Storybook:** A documentação dos componentes frontend utilizando Storybook não foi realizada. 

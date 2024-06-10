@@ -58,10 +58,11 @@ O projeto consiste em uma aplicação para cadastro de desenvolvedores associado
     ```	
 
 ## Tecnologias Utilizadas 🛠
-    -️ Backend: Node.js, Express.js, Prisma ORM, PostgreSQL
-    - Frontend: Next.js, Tailwind CSS, Shadcn/ui
+Backend: Node.js, Express.js, Prisma ORM, PostgreSQL
+Frontend: Next.js, Tailwind CSS, Shadcn/ui
 
 ## Acesse o projeto em produção 🌐
-    - [Dev System](https://dev-system-7qch.vercel.app/)
-    - [Documentação - API](https://dev-system-api.onrender.com/api/docs/)
+
+  - [Dev System](https://dev-system-7qch.vercel.app/)
+  - [Documentação - API](https://dev-system-api.onrender.com/api/docs/)
 
